@@ -1,0 +1,11 @@
+*{
+    -fx-fill: white;
+}
+
+#tab-unselected{
+    -fx-background-color: #1b1b1b;
+}
+
+#tab-selected{
+    -fx-background-color: #00008B;
+}

@@ -4,6 +4,7 @@ import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
 public class main {
@@ -20,6 +21,12 @@ public class main {
     Pane dashboard_pane;
     @FXML
     Pane settings_pane;
+    @FXML
+    TextField text_username;
+    @FXML
+    TextField text_password;
+    @FXML
+    Button login_btn;
 
     @FXML
     private void initialize() {
@@ -44,6 +51,16 @@ public class main {
         profile_pane.setVisible(true);
         dashboard_pane.setVisible(false);
         settings_pane.setVisible(false);
+    }
+
+    @FXML
+    private void login_Click() throws IOException{
+        //login logic
+        try {
+            System.out.println("username: "+text_username.getText() + "\n" + "password: " +text_password.getText());
+        } catch (Exception e) {
+            System.out.println("wrong login credentials");
+        }
     }
 
     @FXML

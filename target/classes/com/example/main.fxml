@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -15,16 +14,26 @@
 
 <VBox prefHeight="439.0" prefWidth="735.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.main">
    <children>
-      <AnchorPane id="anchorParent" fx:id="anchorParent" prefHeight="439.0" prefWidth="735.0">
+      <AnchorPane id="anchorParent" fx:id="anchorParent" prefHeight="439.0" prefWidth="735.0" stylesheets="@design/text-field.css">
          <children>
             <AnchorPane id="main_pane" fx:id="main_pane" layoutX="200.0" prefHeight="439.0" prefWidth="535.0" stylesheets="@design/style.css">
                <children>
-                  <AnchorPane fx:id="dashboard_pane" prefHeight="439.0" prefWidth="535.0" visible="false">
+                  <AnchorPane fx:id="dashboard_pane" prefHeight="439.0" prefWidth="535.0">
                      <children>
-                        <Label text="Dashboard" />
+                        <GridPane prefHeight="439.0" prefWidth="535.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                        </GridPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="profile_pane" prefHeight="439.0" prefWidth="535.0">
+                  <AnchorPane fx:id="profile_pane" prefHeight="439.0" prefWidth="535.0" visible="false">
                      <children>
                         <GridPane prefHeight="439.0" prefWidth="535.0" stylesheets="@design/grid.css">
                           <columnConstraints>
@@ -46,9 +55,12 @@
                                     <Image url="@images/person.png" />
                                  </image>
                               </ImageView>
-                              <TextField id="text-field" fx:id="username_field_lg" editable="false" focusTraversable="false" translateY="-50.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <TextField id="text-field" fx:id="password_field_lg" editable="false" focusTraversable="false" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <TextField id="text-field" fx:id="real_name_lg" editable="false" focusTraversable="false" translateY="50.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField id="text-field" fx:id="username_field_lg" focusTraversable="false" translateY="-70.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField id="text-field" fx:id="password_field_lg" focusTraversable="false" translateY="-30.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField id="text-field" fx:id="real_name_lg" focusTraversable="false" translateY="10.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Button id="tab-selected" fx:id="apply_btn_lg" mnemonicParsing="false" onAction="#apply_Click" stylesheets="@design/tabs.css" text="Apply" translateX="210.0" translateY="85.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Button id="tab-selected" fx:id="cancel_btn_lg" layoutX="149.0" layoutY="218.0" mnemonicParsing="false" onAction="#cancel_Click" stylesheets="@design/tabs.css" text="Cancel" translateX="140.0" translateY="85.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField id="text-field" fx:id="surname_lg" translateY="50.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                            </children>
                         </GridPane>
                      </children>
@@ -62,14 +74,12 @@
             <AnchorPane id="side_pane" prefHeight="439.0" prefWidth="200.0" stylesheets="@design/side-bar.css">
                <children>
                   <Button id="tab-selected" fx:id="side_profile" layoutY="2.0" mnemonicParsing="false" onAction="#profile_Click" prefHeight="25.0" prefWidth="200.0" stylesheets="@design/tabs.css" text="Profile" />
-                  <Button id="tab-unselected" fx:id="side_settings" layoutY="400.0" mnemonicParsing="false" onAction="#settings_Click" prefHeight="25.0" prefWidth="200.0" stylesheets="@design/tabs.css" text="Settings" />
+                  <Button id="tab-unselected" fx:id="side_settings" layoutY="381.0" mnemonicParsing="false" onAction="#settings_Click" prefHeight="25.0" prefWidth="200.0" stylesheets="@design/tabs.css" text="Settings" />
                   <Button id="tab-unselected" fx:id="side_dashboard" layoutY="27.0" mnemonicParsing="false" onAction="#dashboard_Click" prefHeight="25.0" prefWidth="200.0" stylesheets="@design/tabs.css" text="Dashboard" visible="false" />
+                  <Button id="log-out" fx:id="logout_btn" layoutY="406.0" mnemonicParsing="false" onAction="#logout_Click" prefHeight="25.0" prefWidth="200.0" stylesheets="@design/tabs.css" text="Log out" textFill="RED" visible="false" />
+                  <Button id="tab-unselected" fx:id="side_rent" layoutY="52.0" mnemonicParsing="false" onAction="#rent_Click" prefHeight="25.0" prefWidth="200.0" stylesheets="@design/tabs.css" text="Rents" visible="false" />
                </children>
             </AnchorPane>
-         </children>
-         <stylesheets>
-            <URL value="@design/text.css" />
-            <URL value="@design/text-field.css" />
-         </stylesheets></AnchorPane>
+         </children></AnchorPane>
    </children>
 </VBox>

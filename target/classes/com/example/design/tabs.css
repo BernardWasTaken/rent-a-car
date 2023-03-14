@@ -1,11 +1,14 @@
-*{
-    -fx-fill: white;
+#log-out{
+    -fx-background-color: #1b1b1b;
+    -fx-text-fill: red;
 }
 
 #tab-unselected{
     -fx-background-color: #1b1b1b;
+    -fx-text-fill: white;
 }
 
 #tab-selected{
     -fx-background-color: #00008B;
+    -fx-text-fill: white;
 }

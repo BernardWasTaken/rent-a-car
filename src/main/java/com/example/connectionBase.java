@@ -77,13 +77,14 @@ public class connectionBase {
             {
                 Statement stmt = conn.createStatement();
 
-                ResultSet rst = stmt.executeQuery("SELECT * FROM getUserInfo('" + username + "', '" + password + "')");
+                ResultSet rst = stmt.executeQuery("SELECT * FROM getUserInfo2('" + username + "', '" + password + "')");
 
                 while(rst.next())
                 {
                     ret.add(rst.getString(1));
                     ret.add(rst.getString(2));
                     ret.add(rst.getString(3));
+                    ret.add(rst.getString(4));
                 }
             }
             catch (Exception ex)
@@ -91,6 +92,20 @@ public class connectionBase {
                 System.out.println(ex.getMessage());
             }
             return ret;
+        }
+
+        public void updateData(String old_username, String new_username, String new_firstname, String new_surname, String new_password)
+        {
+            try
+            {
+                Statement stmt = conn.createStatement();
+
+                stmt.executeQuery("SELECT updateData('"+old_username+"', '"+new_username+"', '"+new_password+"', '"+new_firstname+"', '"+new_surname+"');");
+            }
+            catch (Exception ex)
+            {
+                System.out.println(ex.getMessage());
+            }
         }
 
     

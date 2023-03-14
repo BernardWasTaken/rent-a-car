@@ -37,6 +37,12 @@ public class App extends Application {
     public static void main(String[] args) {
         connectionBase cbe=new connectionBase();
         cbe.connect();
+        try {
+            cbe.getAllUsers();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         launch();
     }
 

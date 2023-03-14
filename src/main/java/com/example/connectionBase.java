@@ -1,5 +1,8 @@
 package com.example;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -7,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class connectionBase {
@@ -105,6 +109,29 @@ public class connectionBase {
             catch (Exception ex)
             {
                 System.out.println(ex.getMessage());
+            }
+        }
+
+
+        public void getAllUsers() throws IOException {
+            try {
+                String url = "http://localhost:8080/users"; // Replace with your API endpoint URL
+
+                URL apiUrl = new URL(url);
+                HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
+                connection.setRequestMethod("GET");
+
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    Scanner scanner = new Scanner(connection.getInputStream());
+                    String responseData = scanner.useDelimiter("\\A").next();
+                    scanner.close();
+                    System.out.println(responseData);
+                } else {
+                    System.out.println("Error: API request failed with response code " + responseCode);
+                }
+            } catch (Exception e) {
+                // TODO: handle exception
             }
         }
 

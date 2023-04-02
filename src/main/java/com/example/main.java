@@ -1,11 +1,21 @@
 package com.example;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
 public class main {
@@ -21,11 +31,11 @@ public class main {
     @FXML
     Button side_settings;
     @FXML
-    Pane profile_pane;
+    AnchorPane profile_pane;
     @FXML
-    Pane dashboard_pane;
+    AnchorPane dashboard_pane;
     @FXML
-    Pane settings_pane;
+    AnchorPane settings_pane;
     @FXML
     TextField text_username;
     @FXML
@@ -50,6 +60,12 @@ public class main {
     Button logout_btn;
     @FXML
     Button side_rent;
+    @FXML
+    Button side_users;
+    @FXML
+    AnchorPane rents_pane;
+    @FXML
+    AnchorPane users_pane;
 
     @FXML
     private void initialize() {
@@ -72,16 +88,55 @@ public class main {
         side_dashboard.setId("tab-unselected");
         side_profile.setId("tab-unselected");
         side_settings.setId("tab-unselected");
+        side_users.setId("tab-unselected");
 
         profile_pane.setVisible(false);
         dashboard_pane.setVisible(false);
         settings_pane.setVisible(false);
+        users_pane.setVisible(false);
+        rents_pane.setVisible(true);
+
+        unloadUsers();
+    }
+
+    private void unloadUsers() throws IOException{
+        users_pane.getChildren().clear();
+    }
+
+    private void addUsers() throws IOException{
+        users_pane.prefWidthProperty().bind(App.scene.widthProperty());
+        users_pane.prefHeightProperty().bind(App.scene.heightProperty());
+
+        // Create an array of button texts
+        String[] buttonTexts = {"Button 1", "Button 2", "Button 3"};
+
+        // Calculate the height of each button based on the number of buttons and the height of the anchor pane
+        double buttonHeight = 20;
+
+        // Loop through the button texts and create a new button for each one
+        for (int i = 0; i < buttonTexts.length; i++) {
+            Button button = new Button(buttonTexts[i]);
+            
+            // Set the ID of the button
+            button.setId("tab-selected");
+            
+            // Set the width and height of the button
+            button.setPrefWidth(users_pane.getWidth());
+            button.setPrefHeight(buttonHeight);
+            
+            // Set the position of the button below the previous button
+            button.setLayoutY(buttonHeight * i);
+            
+            // Add the button to the AnchorPane
+            users_pane.getChildren().add(button);
+        }
     }
 
     private void logged_in()
     {
         side_dashboard.setVisible(true);
         side_rent.setVisible(true);
+        side_users.setVisible(true);
 
         text_username.setVisible(false);
         text_password.setVisible(false);
@@ -102,6 +157,9 @@ public class main {
     private void logged_out()
     {
         side_dashboard.setVisible(false);
+        side_rent.setVisible(false);
+        side_users.setVisible(false);
+
 
         text_username.setVisible(true);
         text_password.setVisible(true);
@@ -122,10 +180,14 @@ public class main {
         side_profile.setId("tab-selected");
         side_dashboard.setId("tab-unselected");
         side_settings.setId("tab-unselected");
+        side_rent.setId("tab-unselected");
+        side_users.setId("tab-unselected");
 
         profile_pane.setVisible(true);
         dashboard_pane.setVisible(false);
         settings_pane.setVisible(false);
+        rents_pane.setVisible(false);
+        users_pane.setVisible(false);
     }
 
     @FXML
@@ -152,15 +214,39 @@ public class main {
         side_dashboard.setId("tab-unselected");
         side_settings.setId("tab-unselected");
         side_rent.setId("tab-unselected");
+        side_users.setId("tab-unselected");
 
         profile_pane.setVisible(true);
         dashboard_pane.setVisible(false);
         settings_pane.setVisible(false);
+        rents_pane.setVisible(false);
+        users_pane.setVisible(false);
+
+        unloadUsers();
     }
 
     @FXML
     private void logout_Click() throws IOException{
         logged_out();
+        unloadUsers();
+    }
+
+    @FXML
+    private void users_Click() throws IOException{
+
+        side_profile.setId("tab-unselected");
+        side_dashboard.setId("tab-unselected");
+        side_settings.setId("tab-unselected");
+        side_rent.setId("tab-unselected");
+        side_users.setId("tab-selected");
+
+        profile_pane.setVisible(false);
+        dashboard_pane.setVisible(false);
+        settings_pane.setVisible(false);
+        rents_pane.setVisible(false);
+        users_pane.setVisible(true);
+
+        addUsers();
     }
 
     private void fillData(){
@@ -188,10 +274,15 @@ public class main {
         side_dashboard.setId("tab-selected");
         side_settings.setId("tab-unselected");
         side_rent.setId("tab-unselected");
+        side_users.setId("tab-unselected");
 
         profile_pane.setVisible(false);
         dashboard_pane.setVisible(true);
         settings_pane.setVisible(false);
+        rents_pane.setVisible(false);
+        users_pane.setVisible(false);
+
+        unloadUsers();
     }
 
     @FXML
@@ -200,9 +291,14 @@ public class main {
         side_dashboard.setId("tab-unselected");
         side_settings.setId("tab-selected");
         side_rent.setId("tab-unselected");
+        side_users.setId("tab-unselected");
 
         profile_pane.setVisible(false);
         dashboard_pane.setVisible(false);
         settings_pane.setVisible(true);
+        rents_pane.setVisible(false);
+        users_pane.setVisible(false);
+
+        unloadUsers();
     }
 }

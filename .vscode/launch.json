@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "com.example/com.example.App",
+            "projectName": "rent-a-car"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)",
+            "request": "launch",
+            "mainClass": "${file}",
+            "classpath": [
+                "D:/dowloads/javax.json-api-1.1.4.jar"
+            ]
+        }
+    ]
+}

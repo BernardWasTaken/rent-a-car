@@ -14,7 +14,7 @@ import java.io.IOException;
  */
 public class App extends Application {
 
-    private static Scene scene;
+    public static Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -38,7 +38,7 @@ public class App extends Application {
         connectionBase cbe=new connectionBase();
         cbe.connect();
         try {
-            cbe.getAllUsers();
+            cbe.decon(cbe.getAllUsers());
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

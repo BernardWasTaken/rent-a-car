@@ -1,6 +1,7 @@
 package com.example;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Connection;
@@ -9,7 +10,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 
@@ -44,33 +48,69 @@ public class connectionBase {
 
 
 
+    public String getAllUsers() throws IOException {
+        String responseData = null;
+        try {
+            String url = "http://localhost:8080/users"; // Replace with your API endpoint URL
+
+            URL apiUrl = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
+            connection.setRequestMethod("GET");
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                Scanner scanner = new Scanner(connection.getInputStream());
+                responseData = scanner.useDelimiter("\\A").next();
+                scanner.close();
+                System.out.println(responseData);
+            } else {
+                System.out.println("Error: API request failed with response code " + responseCode);
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return responseData;
+    }
 
         public int LogIn(String username, String password)
         {
-            try
-            {
-                Statement stmt = conn.createStatement();
+            int successNumber = -1;
+            String responseData = null;
+            try{
 
-                ResultSet rst = stmt.executeQuery("SELECT login('" + username + "', '" + password + "')");
+                URL url = new URL("http://localhost:8080/users/checkLogin?username="+username+"&password="+password+""); // Replace with your API endpoint URL
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
 
-                if(rst.next())
-                {
-                    if (rst.getInt(1) == 1)
-                    {
-                        return 1;
-                    }
-                    else if (rst.getInt(1) == 0)
-                    {
-                        System.out.println("Wrong username or password. Please try again!");
-                        return 0;
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    Scanner scanner = new Scanner(connection.getInputStream());
+                    responseData = scanner.useDelimiter("\\A").next();
+                    scanner.close();
+                    System.out.println(responseData); // Print the response data to the console
+                } else {
+                    System.out.println("Error: API request failed with response code " + responseCode);
+                }
+                successNumber = -1;
+                int startIndex = responseData.indexOf("success+");
+                if (startIndex != -1) {
+                    startIndex += "success+".length();
+                    int endIndex = responseData.indexOf("\"", startIndex);
+                    if (endIndex != -1) {
+                        String successString = responseData.substring(startIndex, endIndex);
+                        successNumber = Integer.parseInt(successString);
                     }
                 }
+            } catch (Exception e) {
+                System.out.println("Error parsing success number: " + e.getMessage());
             }
-            catch (Exception ex)
-            {
-                System.out.println(ex.getMessage());
-            }
-            return 0;
+            System.out.println(successNumber);
+            return successNumber;
+        }
+
+        public void decon(String jsonStr) {
+            String newStr = jsonStr.replace("data", "");
+            System.out.println(newStr);
         }
 
         public List<String> getUserInfo(String username, String password)
@@ -109,29 +149,6 @@ public class connectionBase {
             catch (Exception ex)
             {
                 System.out.println(ex.getMessage());
-            }
-        }
-
-
-        public void getAllUsers() throws IOException {
-            try {
-                String url = "http://localhost:8080/users"; // Replace with your API endpoint URL
-
-                URL apiUrl = new URL(url);
-                HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
-                connection.setRequestMethod("GET");
-
-                int responseCode = connection.getResponseCode();
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    Scanner scanner = new Scanner(connection.getInputStream());
-                    String responseData = scanner.useDelimiter("\\A").next();
-                    scanner.close();
-                    System.out.println(responseData);
-                } else {
-                    System.out.println("Error: API request failed with response code " + responseCode);
-                }
-            } catch (Exception e) {
-                // TODO: handle exception
             }
         }
 

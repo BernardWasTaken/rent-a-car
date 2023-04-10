@@ -95,19 +95,21 @@
                   <AnchorPane fx:id="users_pane" prefHeight="439.0" prefWidth="535.0" visible="false">
                      <children>
                         <Label text="Users" />
+                        <Button text="Create" onAction="#CreateUser_Click"/>
+                        <AnchorPane fx:id="users_pane_view" prefWidth="535.0"/>
                      </children>
                   </AnchorPane>
                   <AnchorPane fx:id="createuser_pane" prefHeight="439.0" prefWidth="535.0" visible="false">
                      <children>
                         <Label layoutY="6.0" text="CreateUser" />
-                        <TextField layoutX="193.0" layoutY="87.0" />
-                        <TextField layoutX="193.0" layoutY="122.0" />
-                        <DatePicker layoutX="181.0" layoutY="161.0" />
-                        <ComboBox layoutX="193.0" layoutY="195.0" prefWidth="150.0" />
-                        <TextField layoutX="194.0" layoutY="231.0" />
-                        <TextField layoutX="194.0" layoutY="271.0" />
-                        <Button layoutX="462.0" layoutY="400.0" mnemonicParsing="false" text="Confirm" />
-                        <Button layoutX="398.0" layoutY="400.0" mnemonicParsing="false" text="Cancel" />
+                        <TextField layoutX="193.0" layoutY="87.0" fx:id="firstname" />
+                        <TextField layoutX="193.0" layoutY="122.0" fx:id="surname"/>
+                        <DatePicker layoutX="181.0" layoutY="161.0" fx:id="birth"/>
+                        <ComboBox layoutX="193.0" layoutY="195.0" prefWidth="150.0" fx:id="city"/>
+                        <TextField layoutX="194.0" layoutY="231.0" fx:id="username"/>
+                        <TextField layoutX="194.0" layoutY="271.0" fx:id="password"/>
+                        <Button layoutX="462.0" layoutY="400.0" mnemonicParsing="false" text="Confirm" onAction="#ConfirmCreateUser_Click"/>
+                        <Button layoutX="398.0" layoutY="400.0" mnemonicParsing="false" text="Cancel" onAction="#CancelCreateUser_Click"/>
                      </children>
                   </AnchorPane>
                </children></AnchorPane>

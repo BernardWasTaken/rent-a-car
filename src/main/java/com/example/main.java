@@ -72,6 +72,14 @@ public class main {
     AnchorPane rents_pane_view;
     @FXML
     AnchorPane users_pane;
+    AnchorPane users_pane_view;
+    AnchorPane createuser_pane;
+    TextField firstname;
+    TextField surname;
+    DatePicker birth;
+    ComboBox city;
+    TextField username;
+    TextField password;
 
     @FXML
     private void initialize() {
@@ -102,8 +110,6 @@ public class main {
         users_pane.setVisible(false);
         rents_pane.setVisible(true);
 
-        rents_pane.getChildren().clear();
-
         rents_pane_view.getChildren().clear();
 
         String rents = cb.GetAllRents();
@@ -131,14 +137,89 @@ public class main {
                 button.setLayoutY(buttonHeight * x);
                 
                 // Add the button to the AnchorPane
-                users_pane.getChildren().add(button);
+                rents_pane_view.getChildren().add(button);
 
                 x++;
             }
         }
     }
+    String edituserbool = "0";
+    private void CreateUser_Click() throws IOException {
+        users_pane.setVisible(false);
+        createuser_pane.setVisible(true);
 
-    int editrentbool = 0;
+        String citys = cb.GetAllCitys();
+        city.getItems().clear();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(citys);
+
+        // Extract "data" field value
+        JsonNode dataArray = jsonNode.get("data");
+
+        // Iterate through the array and print each string
+        if (dataArray.isArray()) {
+            for (JsonNode node : dataArray) {
+                String dataString = node.asText();
+                city.getItems().add(dataString);
+            }
+        }
+    }
+
+    public void CancelCreateUser_Click() throws IOException {
+        users_pane.setVisible(true);
+        createuser_pane.setVisible(false);
+
+        edituserbool = "0";
+    }
+
+    public void ConfirmCreateUser_Click() throws IOException {
+        if (edituserbool == "0")
+        {
+            LocalDate selectedDate = birth.getValue();
+            String birth = selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+            int success = cb.CreateUser(firstname.getText(), surname.getText(), birth, city.getValue().toString(), "zamenjaj", username.getText(), password.getText());
+
+            if (success == -1)
+            {
+                
+            }
+            else
+            {
+                rents_pane.setVisible(true);
+                createrent_pane.setVisible(false);
+            }
+        }
+        else{
+            LocalDate selectedDate = fromdate_datepicker.getValue();
+            String fromdate = selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+            selectedDate = todate_datepicker.getValue();
+            String todate = selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+            int success = cb.EditUser(edituserbool, firstname.getText(), surname.getText(), username.getText(), password.getText());
+
+            if (success == -1)
+            {
+                
+            }
+            else
+            {
+                users_pane.setVisible(true);
+                createuser_pane.setVisible(false);
+            }
+        }
+    }
+
+    String editrentbool = "0";
+    public void CancelCreateRent_Click() throws IOException {
+        rents_pane.setVisible(true);
+        createrent_pane.setVisible(false);
+
+        editrentbool = "0";
+    }
+
     private void CreateRent_Click() throws IOException {
         rents_pane.setVisible(false);
         createrent_pane.setVisible(true);
@@ -184,7 +265,7 @@ public class main {
     }
 
     private void ConfirmCreateRent_Click() throws IOException {
-        if (editrentbool == 0)
+        if (editrentbool == "0")
         {
             LocalDate selectedDate = fromdate_datepicker.getValue();
             String fromdate = selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -211,7 +292,7 @@ public class main {
             selectedDate = todate_datepicker.getValue();
             String todate = selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-            int success = cb.edit(car_combobox.getValue().toString(), user_combobox.getValue().toString(), fromdate, todate);
+            int success = cb.EditRent(editrentbool, car_combobox.getValue().toString(), user_combobox.getValue().toString(), fromdate, todate);
 
             if (success == -1)
             {
@@ -250,7 +331,7 @@ public class main {
                     // Handle button click event
                     JButton clickedButton = (JButton) e.getSource();
                     String[] text = clickedButton.getText().split("+");
-                    EditRent(text[0]);
+                    EditUser(text[4]);
                 }
             });
             
@@ -269,8 +350,58 @@ public class main {
         }
     }
 
+    public void EditUser(String username)
+    {
+        edituserbool = username;
+
+        String cities = cb.GetAllCitys();
+
+        city.getItems().clear();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(cities);
+
+        // Extract "data" field value
+        JsonNode dataArray = jsonNode.get("data");
+
+        // Iterate through the array and print each string
+        if (dataArray.isArray()) {
+            for (JsonNode node : dataArray) {
+                String dataString = node.asText();
+                city.getItems().add(dataString);
+            }
+        }
+
+        String user = cb.GetUser(username);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(user);
+
+        // Extract "data" field value
+        dataArray = jsonNode.get("data");
+
+        if (dataArray.isArray()) {
+            for (JsonNode node : dataArray) {
+                String[] array = dataArray.toString().split("+");
+
+                firstname.setText(array[1]);
+                surname.setText(array[2]);
+
+                DateTimeFormatter formatedate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate birthday = LocalDate.parse(array[3], formatedate);
+                
+                birth.setValue(birthday);
+
+                this.username.setText(array[4]);
+                password.setText(array[5]);
+            }
+        }
+    }
+
     public void EditRent(String id)
     {
+        editrentbool = id;
+
         String rent = cb.GetRent(id);
 
         String cars = cb.GetAllCars();
@@ -279,11 +410,8 @@ public class main {
         user_combobox.getItems().clear();
         car_combobox.getItems().clear();
 
-
-        String users = cb.GetAllRents();
-
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(rents);
+        JsonNode jsonNode = objectMapper.readTree(users);
 
         // Extract "data" field value
         JsonNode dataArray = jsonNode.get("data");
@@ -447,7 +575,38 @@ public class main {
         rents_pane.setVisible(false);
         users_pane.setVisible(true);
 
-        addUsers();
+        users_pane_view.getChildren().clear();
+
+        String rents = cb.GetAllUsers();
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(rents);
+
+        // Extract "data" field value
+        JsonNode dataArray = jsonNode.get("data");
+        double buttonHeight = 20;
+        int x = 0;
+        // Iterate through the array and print each string
+        if (dataArray.isArray()) {
+            for (JsonNode node : dataArray) {
+                String dataString = node.asText();
+                Button button = new Button(dataString);
+            
+                // Set the ID of the button
+                button.setId("tab-selected");
+                
+                // Set the width and height of the button
+                button.setPrefWidth(rents_pane_view.getWidth());
+                button.setPrefHeight(buttonHeight);
+                
+                // Set the position of the button below the previous button
+                button.setLayoutY(buttonHeight * x);
+                
+                // Add the button to the AnchorPane
+                users_pane_view.getChildren().add(button);
+
+                x++;
+            }
+        }
     }
 
     private void fillData(){

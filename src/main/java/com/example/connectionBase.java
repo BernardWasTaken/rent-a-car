@@ -213,6 +213,68 @@ public class connectionBase {
             return responseData;
         }
 
+        public String GetAllCitys() throws IOException {
+            String responseData = null;
+
+            try {
+                String url = "http://localhost:8080/cities"; // Replace with your API endpoint URL
+    
+                URL apiUrl = new URL(url);
+                HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
+                connection.setRequestMethod("GET");
+    
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    Scanner scanner = new Scanner(connection.getInputStream());
+                    responseData = scanner.useDelimiter("\\A").next();
+                    scanner.close();
+                    System.out.println(responseData);
+                } else {
+                    System.out.println("Error: API request failed with response code " + responseCode);
+                }
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+            return responseData;
+        }
+
+        public int CreateUser(String firstname, String surname, String birth, String city, String email, String username, String password)
+        {
+            int successNumber = -1;
+            String responseData = null;
+            try{
+
+                URL url = new URL("http://localhost:8080/users/insertUser?new_firstname=" + firstname + "&new_surname=" + surname + "&new_birth" + birth + "&new_email=" + email + "&new_username=" + username + "&new_password=" + password + ""); 
+                // Replace with your API endpoint URL
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    Scanner scanner = new Scanner(connection.getInputStream());
+                    responseData = scanner.useDelimiter("\\A").next();
+                    scanner.close();
+                    System.out.println(responseData); // Print the response data to the console
+                } else {
+                    System.out.println("Error: API request failed with response code " + responseCode);
+                }
+                successNumber = -1;
+                int startIndex = responseData.indexOf("success+");
+                if (startIndex != -1) {
+                    startIndex += "success+".length();
+                    int endIndex = responseData.indexOf("\"", startIndex);
+                    if (endIndex != -1) {
+                        String successString = responseData.substring(startIndex, endIndex);
+                        successNumber = Integer.parseInt(successString);
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Error parsing success number: " + e.getMessage());
+            }
+            System.out.println(successNumber);
+            return successNumber;
+        }
+
         public int CreateRent(String car_id, String user_id, String fromdate, String todate)
         {
             int successNumber = -1;
@@ -285,6 +347,69 @@ public class connectionBase {
             }
             System.out.println(successNumber);
             return successNumber;
+        }
+
+        public int EditUser(String oldusername, String firstname, String surname, String username, String password)
+        {
+            int successNumber = -1;
+            String responseData = null;
+            try{
+
+                URL url = new URL("http://localhost:8080/rents/updateUsers?old_username=" + oldusername + "&new_username=" + username + "&new_firstname=" + firstname + "&new_surname=" + surname + "&new_password=" + password + ""); 
+                // Replace with your API endpoint URL
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    Scanner scanner = new Scanner(connection.getInputStream());
+                    responseData = scanner.useDelimiter("\\A").next();
+                    scanner.close();
+                    System.out.println(responseData); // Print the response data to the console
+                } else {
+                    System.out.println("Error: API request failed with response code " + responseCode);
+                }
+                successNumber = -1;
+                int startIndex = responseData.indexOf("success+");
+                if (startIndex != -1) {
+                    startIndex += "success+".length();
+                    int endIndex = responseData.indexOf("\"", startIndex);
+                    if (endIndex != -1) {
+                        String successString = responseData.substring(startIndex, endIndex);
+                        successNumber = Integer.parseInt(successString);
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Error parsing success number: " + e.getMessage());
+            }
+            System.out.println(successNumber);
+            return successNumber;
+        }
+
+        public String GetUser(String username)
+        {
+            String responseData = null;
+
+            try {
+                String url = "http://localhost:8080/users/getSpec?id=" + username; // Replace with your API endpoint URL
+    
+                URL apiUrl = new URL(url);
+                HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
+                connection.setRequestMethod("GET");
+    
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    Scanner scanner = new Scanner(connection.getInputStream());
+                    responseData = scanner.useDelimiter("\\A").next();
+                    scanner.close();
+                    System.out.println(responseData);
+                } else {
+                    System.out.println("Error: API request failed with response code " + responseCode);
+                }
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+            return responseData;
         }
 
         public String GetRent(String id)

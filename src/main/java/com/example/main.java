@@ -1,22 +1,21 @@
 package com.example;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.fasterxml.jackson.core.ObjectMapper;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 
 public class main {
     
@@ -65,12 +64,19 @@ public class main {
     @FXML
     AnchorPane rents_pane;
     @FXML
+    AnchorPane createrent_pane;
+    ComboBox car_combobox;
+    ComboBox user_combobox;
+    DatePicker fromdate_datepicker;
+    DatePicker todate_datepicker;
+    AnchorPane rents_pane_view;
+    @FXML
     AnchorPane users_pane;
 
     @FXML
     private void initialize() {
         if (profile_pane == null) {
-            FXMLLoader loader = new FXMLLoader(App.class.getResource("main.fxml"));
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("/main.fxml"));
             loader.setController(this);
             try {
                 cb.connect();
@@ -96,11 +102,132 @@ public class main {
         users_pane.setVisible(false);
         rents_pane.setVisible(true);
 
-        unloadUsers();
+        rents_pane.getChildren().clear();
+
+        rents_pane_view.getChildren().clear();
+
+        String rents = cb.GetAllRents();
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(rents);
+
+        // Extract "data" field value
+        JsonNode dataArray = jsonNode.get("data");
+        double buttonHeight = 20;
+        int x = 0;
+        // Iterate through the array and print each string
+        if (dataArray.isArray()) {
+            for (JsonNode node : dataArray) {
+                String dataString = node.asText();
+                Button button = new Button(dataString);
+            
+                // Set the ID of the button
+                button.setId("tab-selected");
+                
+                // Set the width and height of the button
+                button.setPrefWidth(rents_pane_view.getWidth());
+                button.setPrefHeight(buttonHeight);
+                
+                // Set the position of the button below the previous button
+                button.setLayoutY(buttonHeight * x);
+                
+                // Add the button to the AnchorPane
+                users_pane.getChildren().add(button);
+
+                x++;
+            }
+        }
     }
 
-    private void unloadUsers() throws IOException{
-        users_pane.getChildren().clear();
+    int editrentbool = 0;
+    private void CreateRent_Click() throws IOException {
+        rents_pane.setVisible(false);
+        createrent_pane.setVisible(true);
+
+        String cars = cb.GetAllCars();
+        String users = cb.getAllUsers();
+
+        user_combobox.getItems().clear();
+        car_combobox.getItems().clear();
+
+
+        String users = cb.GetAllRents();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(rents);
+
+        // Extract "data" field value
+        JsonNode dataArray = jsonNode.get("data");
+
+        // Iterate through the array and print each string
+        if (dataArray.isArray()) {
+            for (JsonNode node : dataArray) {
+                String dataString = node.asText();
+                user_combobox.getItems().add(dataString);
+            }
+        }
+        
+        String cars = cb.GetAllCars();
+
+        objectMapper = new ObjectMapper();
+        jsonNode = objectMapper.readTree(cars);
+
+        // Extract "data" field value
+        dataArray = jsonNode.get("data");
+
+        // Iterate through the array and print each string
+        if (dataArray.isArray()) {
+            for (JsonNode node : dataArray) {
+                String dataString = node.asText();
+                car_combobox.getItems().add(dataString);
+            }
+        }
+    }
+
+    private void ConfirmCreateRent_Click() throws IOException {
+        if (editrentbool == 0)
+        {
+            LocalDate selectedDate = fromdate_datepicker.getValue();
+            String fromdate = selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+            selectedDate = todate_datepicker.getValue();
+            String todate = selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+            int success = cb.CreateRent(car_combobox.getValue().toString(), user_combobox.getValue().toString(), fromdate, todate);
+
+            if (success == -1)
+            {
+                
+            }
+            else
+            {
+                rents_pane.setVisible(true);
+                createrent_pane.setVisible(false);
+            }
+        }
+        else{
+            LocalDate selectedDate = fromdate_datepicker.getValue();
+            String fromdate = selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+            selectedDate = todate_datepicker.getValue();
+            String todate = selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+            int success = cb.edit(car_combobox.getValue().toString(), user_combobox.getValue().toString(), fromdate, todate);
+
+            if (success == -1)
+            {
+                
+            }
+            else
+            {
+                rents_pane.setVisible(true);
+                createrent_pane.setVisible(false);
+            }
+        }
+    }
+
+    private void CalcelCreateRent_Click() throws IOException {
+        rents_pane.setVisible(true);
+        createrent_pane.setVisible(false);
     }
 
     private void addUsers() throws IOException{
@@ -116,6 +243,16 @@ public class main {
         // Loop through the button texts and create a new button for each one
         for (int i = 0; i < buttonTexts.length; i++) {
             Button button = new Button(buttonTexts[i]);
+
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Handle button click event
+                    JButton clickedButton = (JButton) e.getSource();
+                    String[] text = clickedButton.getText().split("+");
+                    EditRent(text[0]);
+                }
+            });
             
             // Set the ID of the button
             button.setId("tab-selected");
@@ -132,6 +269,70 @@ public class main {
         }
     }
 
+    public void EditRent(String id)
+    {
+        String rent = cb.GetRent(id);
+
+        String cars = cb.GetAllCars();
+        String users = cb.getAllUsers();
+
+        user_combobox.getItems().clear();
+        car_combobox.getItems().clear();
+
+
+        String users = cb.GetAllRents();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(rents);
+
+        // Extract "data" field value
+        JsonNode dataArray = jsonNode.get("data");
+
+        // Iterate through the array and print each string
+        if (dataArray.isArray()) {
+            for (JsonNode node : dataArray) {
+                String dataString = node.asText();
+                user_combobox.getItems().add(dataString);
+            }
+        }
+        
+        String cars = cb.GetAllCars();
+
+        objectMapper = new ObjectMapper();
+        jsonNode = objectMapper.readTree(cars);
+
+        // Extract "data" field value
+        dataArray = jsonNode.get("data");
+
+        // Iterate through the array and print each string
+        if (dataArray.isArray()) {
+            for (JsonNode node : dataArray) {
+                String dataString = node.asText();
+                car_combobox.getItems().add(dataString);
+            }
+        }
+
+        objectMapper = new ObjectMapper();
+        jsonNode = objectMapper.readTree(rent);
+
+        // Extract "data" field value
+        dataArray = jsonNode.get("data");
+
+        if (dataArray.isArray()) {
+            for (JsonNode node : dataArray) {
+                String[] array = dataArray.toString().split("+");
+
+                DateTimeFormatter formatedate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate fromdate = LocalDate.parse(array[3], formatedate);
+
+                fromdate_datepicker.setValue(fromdate);
+                
+                LocalDate todate = LocalDate.parse(array[4], formatedate);
+
+                todate_datepicker.setValue(todate);
+            }
+        }
+    }
     private void logged_in()
     {
         side_dashboard.setVisible(true);

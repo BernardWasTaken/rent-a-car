@@ -188,6 +188,31 @@ public class connectionBase {
             return responseData;
         }
 
+        public String GetAllGarages() throws IOException {
+            String responseData = null;
+
+            try {
+                String url = "http://localhost:8080/garages"; // Replace with your API endpoint URL
+    
+                URL apiUrl = new URL(url);
+                HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
+                connection.setRequestMethod("GET");
+    
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    Scanner scanner = new Scanner(connection.getInputStream());
+                    responseData = scanner.useDelimiter("\\A").next();
+                    scanner.close();
+                    System.out.println(responseData);
+                } else {
+                    System.out.println("Error: API request failed with response code " + responseCode);
+                }
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+            return responseData;
+        }
+
         public String GetAllUsers() throws IOException {
             String responseData = null;
 
@@ -312,6 +337,43 @@ public class connectionBase {
             return successNumber;
         }
 
+        public int CreateCar(String name, String licenceplate, String garage_id, String kilometers)
+        {
+            int successNumber = -1;
+            String responseData = null;
+            try{
+
+                URL url = new URL("http://localhost:8080/cars/insertCar?new_name=" + name + "&new_licenceplate=" + licenceplate + "&new_garage_id=" + garage_id + "&new_kilometers=" + kilometers + ""); 
+                // Replace with your API endpoint URL
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    Scanner scanner = new Scanner(connection.getInputStream());
+                    responseData = scanner.useDelimiter("\\A").next();
+                    scanner.close();
+                    System.out.println(responseData); // Print the response data to the console
+                } else {
+                    System.out.println("Error: API request failed with response code " + responseCode);
+                }
+                successNumber = -1;
+                int startIndex = responseData.indexOf("success+");
+                if (startIndex != -1) {
+                    startIndex += "success+".length();
+                    int endIndex = responseData.indexOf("\"", startIndex);
+                    if (endIndex != -1) {
+                        String successString = responseData.substring(startIndex, endIndex);
+                        successNumber = Integer.parseInt(successString);
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Error parsing success number: " + e.getMessage());
+            }
+            System.out.println(successNumber);
+            return successNumber;
+        }
+
         public int EditRent(String rent_id, String car_id, String user_id, String fromdate, String todate)
         {
             int successNumber = -1;
@@ -319,6 +381,43 @@ public class connectionBase {
             try{
 
                 URL url = new URL("http://localhost:8080/rents/updateRent?new_id=" + rent_id + "&new_user_id=" + user_id + "&new_car_id=" + car_id + "&new_fromdate=" + fromdate + "&new_todate=" + todate + ""); 
+                // Replace with your API endpoint URL
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    Scanner scanner = new Scanner(connection.getInputStream());
+                    responseData = scanner.useDelimiter("\\A").next();
+                    scanner.close();
+                    System.out.println(responseData); // Print the response data to the console
+                } else {
+                    System.out.println("Error: API request failed with response code " + responseCode);
+                }
+                successNumber = -1;
+                int startIndex = responseData.indexOf("success+");
+                if (startIndex != -1) {
+                    startIndex += "success+".length();
+                    int endIndex = responseData.indexOf("\"", startIndex);
+                    if (endIndex != -1) {
+                        String successString = responseData.substring(startIndex, endIndex);
+                        successNumber = Integer.parseInt(successString);
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Error parsing success number: " + e.getMessage());
+            }
+            System.out.println(successNumber);
+            return successNumber;
+        }
+
+        public int EditCar(String id, String name, String licenceplate, String garage_id, String kilometers)
+        {
+            int successNumber = -1;
+            String responseData = null;
+            try{
+
+                URL url = new URL("http://localhost:8080/cars/updateCar?car_id=" + id + "&new_name=" + name + "&new_garage_id=" + garage_id + "&new_kilometers=" + kilometers + ""); 
                 // Replace with your API endpoint URL
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
@@ -392,6 +491,32 @@ public class connectionBase {
 
             try {
                 String url = "http://localhost:8080/users/getSpec?id=" + username; // Replace with your API endpoint URL
+    
+                URL apiUrl = new URL(url);
+                HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
+                connection.setRequestMethod("GET");
+    
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    Scanner scanner = new Scanner(connection.getInputStream());
+                    responseData = scanner.useDelimiter("\\A").next();
+                    scanner.close();
+                    System.out.println(responseData);
+                } else {
+                    System.out.println("Error: API request failed with response code " + responseCode);
+                }
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+            return responseData;
+        }
+
+        public String GetCar(String id)
+        {
+            String responseData = null;
+
+            try {
+                String url = "http://localhost:8080/cars/getSpec?id=" + id; // Replace with your API endpoint URL
     
                 URL apiUrl = new URL(url);
                 HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();

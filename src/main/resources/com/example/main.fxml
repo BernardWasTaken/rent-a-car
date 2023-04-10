@@ -21,24 +21,22 @@
          <children>
             <AnchorPane id="main_pane" fx:id="main_pane" layoutX="200.0" prefHeight="439.0" prefWidth="535.0" stylesheets="@design/style.css">
                <children>
+                  <AnchorPane prefHeight="439.0" prefWidth="535.0" fx:id="cars_pane">
+                     <children>
+                        <Label text="Cars" />
+                        <Button text="Create" onAction="CreateCar_Click"/>
+                     </children>
+                  </AnchorPane>
                   <AnchorPane fx:id="dashboard_pane" prefHeight="439.0" prefWidth="535.0" visible="false">
                      <children>
-                        <GridPane prefHeight="439.0" prefWidth="535.0">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                        </GridPane>
+                        <Label text="Cars" />
+                        <Button text="Create" onAction="CreateCar_Click"/>
+                        <AnchorPane fx:id="cars_pane_view" prefWidth="535.0" />
                      </children>
                   </AnchorPane>
                   <AnchorPane fx:id="profile_pane" prefHeight="439.0" prefWidth="535.0" visible="true">
                      <children>
-                        <GridPane prefHeight="439.0" prefWidth="535.0" stylesheets="@design/grid.css">
+                        <GridPane prefHeight="439.0" prefWidth="535.0" stylesheets="@design/grid.css" visible="false">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="281.0" minWidth="10.0" prefWidth="149.0" />
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="471.0" minWidth="10.0" prefWidth="272.0" />
@@ -70,12 +68,12 @@
                   </AnchorPane>
                   <AnchorPane fx:id="createrent_pane" prefHeight="439.0" prefWidth="535.0" visible="false">
                      <children>
-                        <Label layoutY="6.0" text="CreateRent"/>
-                        <ComboBox layoutX="193.0" layoutY="108.0" prefWidth="150.0" fx:id="car_combobox"/>
-                        <ComboBox layoutX="193.0" layoutY="153.0" prefWidth="150.0" fx:id="user_combobox"/>
-                        <DatePicker layoutX="181.0" layoutY="193.0" fx:id="fromdate_datepicker"/>
-                        <DatePicker layoutX="181.0" layoutY="233.0" fx:id="todate_datepicker"/>
-                        <Button layoutX="462.0" layoutY="400.0" mnemonicParsing="false" text="Confirm" onAction="#ConfirmCreateRent_Click"/>
+                        <Label layoutY="6.0" text="CreateRent" />
+                        <ComboBox fx:id="car_combobox" layoutX="193.0" layoutY="108.0" prefWidth="150.0" />
+                        <ComboBox fx:id="user_combobox" layoutX="193.0" layoutY="153.0" prefWidth="150.0" />
+                        <DatePicker fx:id="fromdate_datepicker" layoutX="181.0" layoutY="193.0" />
+                        <DatePicker fx:id="todate_datepicker" layoutX="181.0" layoutY="233.0" />
+                        <Button layoutX="462.0" layoutY="400.0" mnemonicParsing="false" onAction="#ConfirmCreateRent_Click" text="Confirm" />
                         <Button layoutX="399.0" layoutY="400.0" mnemonicParsing="false" onAction="#CancelCreateRent_Click" text="Cancel" />
                      </children>
                   </AnchorPane>
@@ -88,28 +86,39 @@
                   <AnchorPane fx:id="rents_pane" prefHeight="439.0" prefWidth="535.0" visible="false">
                      <children>
                         <Label text="Rents" />
-                        <Button text="Create" onAction="#CreateRent_Click"/>
-                        <AnchorPane fx:id="rents_pane_view" prefWidth="535.0"/>
+                        <Button onAction="#CreateRent_Click" text="Create" />
+                        <AnchorPane fx:id="rents_pane_view" prefWidth="535.0" />
                      </children>
                   </AnchorPane>
                   <AnchorPane fx:id="users_pane" prefHeight="439.0" prefWidth="535.0" visible="false">
                      <children>
                         <Label text="Users" />
-                        <Button text="Create" onAction="#CreateUser_Click"/>
-                        <AnchorPane fx:id="users_pane_view" prefWidth="535.0"/>
+                        <Button onAction="#CreateUser_Click" text="Create" />
+                        <AnchorPane fx:id="users_pane_view" prefWidth="535.0" />
                      </children>
                   </AnchorPane>
                   <AnchorPane fx:id="createuser_pane" prefHeight="439.0" prefWidth="535.0" visible="false">
                      <children>
                         <Label layoutY="6.0" text="CreateUser" />
-                        <TextField layoutX="193.0" layoutY="87.0" fx:id="firstname" />
-                        <TextField layoutX="193.0" layoutY="122.0" fx:id="surname"/>
-                        <DatePicker layoutX="181.0" layoutY="161.0" fx:id="birth"/>
-                        <ComboBox layoutX="193.0" layoutY="195.0" prefWidth="150.0" fx:id="city"/>
-                        <TextField layoutX="194.0" layoutY="231.0" fx:id="username"/>
-                        <TextField layoutX="194.0" layoutY="271.0" fx:id="password"/>
-                        <Button layoutX="462.0" layoutY="400.0" mnemonicParsing="false" text="Confirm" onAction="#ConfirmCreateUser_Click"/>
-                        <Button layoutX="398.0" layoutY="400.0" mnemonicParsing="false" text="Cancel" onAction="#CancelCreateUser_Click"/>
+                        <TextField fx:id="firstname" layoutX="193.0" layoutY="87.0" />
+                        <TextField fx:id="surname" layoutX="193.0" layoutY="122.0" />
+                        <DatePicker fx:id="birth" layoutX="181.0" layoutY="161.0" />
+                        <ComboBox fx:id="city" layoutX="193.0" layoutY="195.0" prefWidth="150.0" />
+                        <TextField fx:id="username" layoutX="194.0" layoutY="231.0" />
+                        <TextField fx:id="password" layoutX="194.0" layoutY="271.0" />
+                        <Button layoutX="462.0" layoutY="400.0" mnemonicParsing="false" onAction="#ConfirmCreateUser_Click" text="Confirm" />
+                        <Button layoutX="398.0" layoutY="400.0" mnemonicParsing="false" onAction="#CancelCreateUser_Click" text="Cancel" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="439.0" prefWidth="535.0" fx:id="create_car_pane">
+                     <children>
+                        <Label text="CreateCar" />
+                        <Button layoutX="462.0" layoutY="400.0" mnemonicParsing="false" text="Confirm" onAction="ConfirmCreateCar_Click"/>
+                        <Button layoutX="397.0" layoutY="400.0" mnemonicParsing="false" text="Cancel" onAction="CancelCreateCar_Click"/>
+                        <TextField layoutX="193.0" layoutY="92.0" fx:id="carname_textfield"/>
+                        <TextField layoutX="193.0" layoutY="138.0" fx:id="licenceplate_textfield"/>
+                        <ComboBox layoutX="193.0" layoutY="186.0" prefWidth="150.0" fx:id="garage_combobox"/>
+                        <TextField layoutX="194.0" layoutY="233.0" fx:id="kilometers_textbox"/>
                      </children>
                   </AnchorPane>
                </children></AnchorPane>

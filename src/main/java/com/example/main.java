@@ -80,6 +80,12 @@ public class main {
     ComboBox city;
     TextField username;
     TextField password;
+    AnchorPane cars_pane_view;
+    AnchorPane create_car_pane;
+    TextField carname_textfield;
+    TextField licenceplate_textfield;
+    ComboBox garage_combobox;
+    TextField kilometers_textfield;
 
     @FXML
     private void initialize() {
@@ -125,6 +131,16 @@ public class main {
             for (JsonNode node : dataArray) {
                 String dataString = node.asText();
                 Button button = new Button(dataString);
+
+                button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // Handle button click event
+                        JButton clickedButton = (JButton) e.getSource();
+                        String[] text = clickedButton.getText().split("+");
+                        EditRent(text[0]);
+                    }
+                });
             
                 // Set the ID of the button
                 button.setId("tab-selected");
@@ -306,6 +322,41 @@ public class main {
         }
     }
 
+    private void ConfirmCreateCar_Click() throws IOException {
+        if (editcarbool == "0")
+        {
+            String[] garage = garage_combobox.getValue().toString().split("+");
+
+            int success = cb.CreateCar(carname_textfield.getText(), licenceplate_textfield.getText(), garage[0], kilometers_textfield.getText());
+
+            if (success == -1)
+            {
+                
+            }
+            else
+            {
+                dashboard_pane.setVisible(true);
+                create_car_pane.setVisible(false);
+            }
+        }
+        else{
+            
+            String[] garage = garage_combobox.getValue().toString().split("+");
+
+            int success = cb.EditCar(editcarbool, carname_textfield.getText(), licenceplate_textfield.getText(), garage[0], kilometers_textfield.getText());
+
+            if (success == -1)
+            {
+                
+            }
+            else
+            {
+                rents_pane.setVisible(true);
+                createrent_pane.setVisible(false);
+            }
+        }
+    }
+
     private void CalcelCreateRent_Click() throws IOException {
         rents_pane.setVisible(true);
         createrent_pane.setVisible(false);
@@ -325,15 +376,7 @@ public class main {
         for (int i = 0; i < buttonTexts.length; i++) {
             Button button = new Button(buttonTexts[i]);
 
-            button.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Handle button click event
-                    JButton clickedButton = (JButton) e.getSource();
-                    String[] text = clickedButton.getText().split("+");
-                    EditUser(text[4]);
-                }
-            });
+            
             
             // Set the ID of the button
             button.setId("tab-selected");
@@ -591,6 +634,16 @@ public class main {
                 String dataString = node.asText();
                 Button button = new Button(dataString);
             
+                button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // Handle button click event
+                        JButton clickedButton = (JButton) e.getSource();
+                        String[] text = clickedButton.getText().split("+");
+                        EditUser(text[4]);
+                    }
+                });
+
                 // Set the ID of the button
                 button.setId("tab-selected");
                 
@@ -629,6 +682,8 @@ public class main {
     }
 
     @FXML
+
+    String editcarbool = "0";
     private void dashboard_Click() throws IOException{
         side_profile.setId("tab-unselected");
         side_dashboard.setId("tab-selected");
@@ -642,7 +697,92 @@ public class main {
         rents_pane.setVisible(false);
         users_pane.setVisible(false);
 
-        unloadUsers();
+        cars_pane_view.getChildren().clear();
+
+        String cars = cb.GetAllCars();
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(cars);
+
+        // Extract "data" field value
+        JsonNode dataArray = jsonNode.get("data");
+        double buttonHeight = 20;
+        int x = 0;
+        // Iterate through the array and print each string
+        if (dataArray.isArray()) {
+            for (JsonNode node : dataArray) {
+                String dataString = node.asText();
+                Button button = new Button(dataString);
+            
+                button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // Handle button click event
+                        JButton clickedButton = (JButton) e.getSource();
+                        String[] text = clickedButton.getText().split("+");
+                        EditCar(text[0]);
+                    }
+                });
+
+                // Set the ID of the button
+                button.setId("tab-selected");
+                
+                // Set the width and height of the button
+                button.setPrefWidth(rents_pane_view.getWidth());
+                button.setPrefHeight(buttonHeight);
+                
+                // Set the position of the button below the previous button
+                button.setLayoutY(buttonHeight * x);
+                
+                // Add the button to the AnchorPane
+                cars_pane_view.getChildren().add(button);
+
+                x++;
+            }
+        }
+    }
+
+    public void EditCar(String id)
+    {
+        editcarbool = id;
+
+        String car = cb.GetCar(id);
+
+        garage_combobox.getItems().clear();
+
+        String garages = cb.GetAllGarages();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(garages);
+
+        // Extract "data" field value
+        JsonNode dataArray = jsonNode.get("data");
+
+        // Iterate through the array and print each string
+        if (dataArray.isArray()) {
+            for (JsonNode node : dataArray) {
+                String dataString = node.asText();
+                garage_combobox.getItems().add(dataString);
+            }
+        }
+
+        objectMapper = new ObjectMapper();
+        jsonNode = objectMapper.readTree(car);
+
+        // Extract "data" field value
+        dataArray = jsonNode.get("data");
+
+        if (dataArray.isArray()) {
+            for (JsonNode node : dataArray) {
+                String[] array = dataArray.toString().split("+");
+
+                carname_textfield.setText(array[1]);
+                licenceplate_textfield.setText(array[2]);
+
+                garage_combobox.setValue(array[3]);
+
+                kilometers_textfield.setText(array[4]);
+            }
+        }
     }
 
     @FXML

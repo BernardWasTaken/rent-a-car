@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -137,15 +138,12 @@ public class main {
             String dataString = info;
             Button button = new Button(dataString);
 
-            button.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Handle button click event
-                    JButton clickedButton = (JButton) e.getSource();
-                    String[] text = clickedButton.getText().split(" + ");
-                    EditRent(text[0]);
-                }
-            });
+            String[] infoArray = dataString.split(" + ");
+
+            button.onClick = Function()
+            {
+                EditRent(infoArray[0]);
+            }
 
             // Set the ID of the button
             button.setId("tab-selected");
@@ -605,15 +603,12 @@ public class main {
             String dataString = node;
             Button button = new Button(dataString);
 
-            button.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Handle button click event
-                    JButton clickedButton = (JButton) e.getSource();
-                    String[] text = clickedButton.getText().split(" + ");
-                    EditUser(text[4]);
-                }
-            });
+            String[] nodeArray = dataString.split(" + ");
+
+            button.onClick = Function()
+            {
+                EditUser(nodeArray[0]);
+            }
 
             // Set the ID of the button
             button.setId("tab-selected");
@@ -682,15 +677,12 @@ public class main {
             String dataString = node;
             Button button = new Button(dataString);
 
-            button.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Handle button click event
-                    JButton clickedButton = (JButton) e.getSource();
-                    String[] text = clickedButton.getText().split(" + ");
-                    EditCar(text[0]);
-                }
-            });
+            String[] nodeArray = dataString.split(" + ");
+
+            button.onClick() = Function()
+            {
+                EditCar(nodeArray[0]);
+            }
 
             // Set the ID of the button
             button.setId("tab-selected");

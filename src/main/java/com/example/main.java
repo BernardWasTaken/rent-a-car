@@ -6,8 +6,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.ObjectMapper;
+import com.google.gson.Gson;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -16,12 +20,11 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-
 public class main {
     
     connectionBase cb = new connectionBase();
 
-
+    Gson gson = new Gson();
 
     @FXML
     Button side_profile;
@@ -119,44 +122,45 @@ public class main {
         rents_pane_view.getChildren().clear();
 
         String rents = cb.GetAllRents();
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(rents);
 
-        // Extract "data" field value
-        JsonNode dataArray = jsonNode.get("data");
+        JsonElement jsonString = new JsonParser().parse(rents);
+        JsonObject jsonObject = jsonString.getAsJsonObject();
+        String data = jsonObject.get("data").getAsString();
+        String[] dataArray = data.split(",");
+
+
         double buttonHeight = 20;
+        String test = "";
         int x = 0;
         // Iterate through the array and print each string
-        if (dataArray.isArray()) {
-            for (JsonNode node : dataArray) {
-                String dataString = node.asText();
-                Button button = new Button(dataString);
+        for (String info : dataArray) {
+            String dataString = info;
+            Button button = new Button(dataString);
 
-                button.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        // Handle button click event
-                        JButton clickedButton = (JButton) e.getSource();
-                        String[] text = clickedButton.getText().split("+");
-                        EditRent(text[0]);
-                    }
-                });
-            
-                // Set the ID of the button
-                button.setId("tab-selected");
-                
-                // Set the width and height of the button
-                button.setPrefWidth(rents_pane_view.getWidth());
-                button.setPrefHeight(buttonHeight);
-                
-                // Set the position of the button below the previous button
-                button.setLayoutY(buttonHeight * x);
-                
-                // Add the button to the AnchorPane
-                rents_pane_view.getChildren().add(button);
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Handle button click event
+                    JButton clickedButton = (JButton) e.getSource();
+                    String[] text = clickedButton.getText().split(" + ");
+                    EditRent(text[0]);
+                }
+            });
 
-                x++;
-            }
+            // Set the ID of the button
+            button.setId("tab-selected");
+
+            // Set the width and height of the button
+            button.setPrefWidth(rents_pane_view.getWidth());
+            button.setPrefHeight(buttonHeight);
+
+            // Set the position of the button below the previous button
+            button.setLayoutY(buttonHeight * x);
+
+            // Add the button to the AnchorPane
+            rents_pane_view.getChildren().add(button);
+
+            x++;
         }
     }
     String edituserbool = "0";
@@ -167,18 +171,15 @@ public class main {
         String citys = cb.GetAllCitys();
         city.getItems().clear();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(citys);
-
-        // Extract "data" field value
-        JsonNode dataArray = jsonNode.get("data");
+        JsonElement jsonString = new JsonParser().parse(citys);
+        JsonObject jsonObject = jsonString.getAsJsonObject();
+        String data = jsonObject.get("data").getAsString();
+        String[] stringData = data.split(",");
 
         // Iterate through the array and print each string
-        if (dataArray.isArray()) {
-            for (JsonNode node : dataArray) {
-                String dataString = node.asText();
-                city.getItems().add(dataString);
-            }
+        for (String info : stringData) {
+            String dataString = info;
+            city.getItems().add(dataString);
         }
     }
 
@@ -246,37 +247,26 @@ public class main {
         user_combobox.getItems().clear();
         car_combobox.getItems().clear();
 
-
-        String users = cb.GetAllRents();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(rents);
-
-        // Extract "data" field value
-        JsonNode dataArray = jsonNode.get("data");
+        JsonElement jsonString = new JsonParser().parse(users);
+        JsonObject jsonObject = jsonString.getAsJsonObject();
+        String data = jsonObject.get("data").getAsString();
+        String[] stringData = data.split(",");
 
         // Iterate through the array and print each string
-        if (dataArray.isArray()) {
-            for (JsonNode node : dataArray) {
-                String dataString = node.asText();
-                user_combobox.getItems().add(dataString);
-            }
+        for (String info : stringData) {
+            String dataString = info;
+            user_combobox.getItems().add(dataString);
         }
-        
-        String cars = cb.GetAllCars();
 
-        objectMapper = new ObjectMapper();
-        jsonNode = objectMapper.readTree(cars);
-
-        // Extract "data" field value
-        dataArray = jsonNode.get("data");
+        jsonString = new JsonParser().parse(cars);
+        jsonObject = jsonString.getAsJsonObject();
+        data = jsonObject.get("data").getAsString();
+        stringData = data.split(",");
 
         // Iterate through the array and print each string
-        if (dataArray.isArray()) {
-            for (JsonNode node : dataArray) {
-                String dataString = node.asText();
-                car_combobox.getItems().add(dataString);
-            }
+        for (String info : stringData) {
+            String dataString = info;
+            car_combobox.getItems().add(dataString);
         }
     }
 
@@ -325,7 +315,7 @@ public class main {
     private void ConfirmCreateCar_Click() throws IOException {
         if (editcarbool == "0")
         {
-            String[] garage = garage_combobox.getValue().toString().split("+");
+            String[] garage = garage_combobox.getValue().toString().split(" + ");
 
             int success = cb.CreateCar(carname_textfield.getText(), licenceplate_textfield.getText(), garage[0], kilometers_textfield.getText());
 
@@ -341,7 +331,7 @@ public class main {
         }
         else{
             
-            String[] garage = garage_combobox.getValue().toString().split("+");
+            String[] garage = garage_combobox.getValue().toString().split(" + ");
 
             int success = cb.EditCar(editcarbool, carname_textfield.getText(), licenceplate_textfield.getText(), garage[0], kilometers_textfield.getText());
 
@@ -401,43 +391,37 @@ public class main {
 
         city.getItems().clear();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(cities);
-
-        // Extract "data" field value
-        JsonNode dataArray = jsonNode.get("data");
+        JsonElement jsonString = new JsonParser().parse(cities);
+        JsonObject jsonObject = jsonString.getAsJsonObject();
+        String data = jsonObject.get("data").getAsString();
+        String[] stringData = data.split(",");
 
         // Iterate through the array and print each string
-        if (dataArray.isArray()) {
-            for (JsonNode node : dataArray) {
-                String dataString = node.asText();
-                city.getItems().add(dataString);
-            }
+        for (String node : stringData) {
+            String dataString = node;
+            city.getItems().add(dataString);
         }
 
         String user = cb.GetUser(username);
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(user);
+        jsonString = new JsonParser().parse(user);
+        jsonObject = jsonString.getAsJsonObject();
+        data = jsonObject.get("data").getAsString();
+        stringData = data.split(",");
 
-        // Extract "data" field value
-        dataArray = jsonNode.get("data");
+        for (String node : stringData) {
+            String[] array = node.toString().split(" + ");
 
-        if (dataArray.isArray()) {
-            for (JsonNode node : dataArray) {
-                String[] array = dataArray.toString().split("+");
+            firstname.setText(array[1]);
+            surname.setText(array[2]);
 
-                firstname.setText(array[1]);
-                surname.setText(array[2]);
+            DateTimeFormatter formatedate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate birthday = LocalDate.parse(array[3], formatedate);
 
-                DateTimeFormatter formatedate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                LocalDate birthday = LocalDate.parse(array[3], formatedate);
-                
-                birth.setValue(birthday);
+            birth.setValue(birthday);
 
-                this.username.setText(array[4]);
-                password.setText(array[5]);
-            }
+            this.username.setText(array[4]);
+            password.setText(array[5]);
         }
     }
 
@@ -453,55 +437,44 @@ public class main {
         user_combobox.getItems().clear();
         car_combobox.getItems().clear();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(users);
-
-        // Extract "data" field value
-        JsonNode dataArray = jsonNode.get("data");
-
-        // Iterate through the array and print each string
-        if (dataArray.isArray()) {
-            for (JsonNode node : dataArray) {
-                String dataString = node.asText();
-                user_combobox.getItems().add(dataString);
-            }
-        }
-        
-        String cars = cb.GetAllCars();
-
-        objectMapper = new ObjectMapper();
-        jsonNode = objectMapper.readTree(cars);
-
-        // Extract "data" field value
-        dataArray = jsonNode.get("data");
+        JsonElement jsonString = new JsonParser().parse(users);
+        JsonObject jsonObject = jsonString.getAsJsonObject();
+        String data = jsonObject.get("data").getAsString();
+        String[] stringData = data.split(",");
 
         // Iterate through the array and print each string
-        if (dataArray.isArray()) {
-            for (JsonNode node : dataArray) {
-                String dataString = node.asText();
-                car_combobox.getItems().add(dataString);
-            }
+        for (String node : stringData) {
+            String dataString = node;
+            user_combobox.getItems().add(dataString);
         }
 
-        objectMapper = new ObjectMapper();
-        jsonNode = objectMapper.readTree(rent);
+        jsonString = new JsonParser().parse(cars);
+        jsonObject = jsonString.getAsJsonObject();
+        data = jsonObject.get("data").getAsString();
+        stringData = data.split(",");
 
-        // Extract "data" field value
-        dataArray = jsonNode.get("data");
+        // Iterate through the array and print each string
+        for (String node : stringData) {
+            String dataString = node;
+            car_combobox.getItems().add(dataString);
+        }
 
-        if (dataArray.isArray()) {
-            for (JsonNode node : dataArray) {
-                String[] array = dataArray.toString().split("+");
+        jsonString = new JsonParser().parse(rent);
+        jsonObject = jsonString.getAsJsonObject();
+        data = jsonObject.get("data").getAsString();
+        stringData = data.split(",");
 
-                DateTimeFormatter formatedate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                LocalDate fromdate = LocalDate.parse(array[3], formatedate);
+        for (String node : stringData) {
+            String[] array = node.toString().split(" + ");
 
-                fromdate_datepicker.setValue(fromdate);
-                
-                LocalDate todate = LocalDate.parse(array[4], formatedate);
+            DateTimeFormatter formatedate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate fromdate = LocalDate.parse(array[3], formatedate);
 
-                todate_datepicker.setValue(todate);
-            }
+            fromdate_datepicker.setValue(fromdate);
+
+            LocalDate todate = LocalDate.parse(array[4], formatedate);
+
+            todate_datepicker.setValue(todate);
         }
     }
     private void logged_in()
@@ -594,7 +567,6 @@ public class main {
         rents_pane.setVisible(false);
         users_pane.setVisible(false);
 
-        unloadUsers();
     }
 
     @FXML
@@ -621,44 +593,42 @@ public class main {
         users_pane_view.getChildren().clear();
 
         String rents = cb.GetAllUsers();
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(rents);
+        JsonElement jsonString = new JsonParser().parse(rents);
+        JsonObject jsonObject = jsonString.getAsJsonObject();
+        String data = jsonObject.get("data").getAsString();
+        String[] stringData = data.split(",");
 
-        // Extract "data" field value
-        JsonNode dataArray = jsonNode.get("data");
         double buttonHeight = 20;
         int x = 0;
         // Iterate through the array and print each string
-        if (dataArray.isArray()) {
-            for (JsonNode node : dataArray) {
-                String dataString = node.asText();
-                Button button = new Button(dataString);
-            
-                button.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        // Handle button click event
-                        JButton clickedButton = (JButton) e.getSource();
-                        String[] text = clickedButton.getText().split("+");
-                        EditUser(text[4]);
-                    }
-                });
+        for (String node : stringData) {
+            String dataString = node;
+            Button button = new Button(dataString);
 
-                // Set the ID of the button
-                button.setId("tab-selected");
-                
-                // Set the width and height of the button
-                button.setPrefWidth(rents_pane_view.getWidth());
-                button.setPrefHeight(buttonHeight);
-                
-                // Set the position of the button below the previous button
-                button.setLayoutY(buttonHeight * x);
-                
-                // Add the button to the AnchorPane
-                users_pane_view.getChildren().add(button);
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Handle button click event
+                    JButton clickedButton = (JButton) e.getSource();
+                    String[] text = clickedButton.getText().split(" + ");
+                    EditUser(text[4]);
+                }
+            });
 
-                x++;
-            }
+            // Set the ID of the button
+            button.setId("tab-selected");
+
+            // Set the width and height of the button
+            button.setPrefWidth(rents_pane_view.getWidth());
+            button.setPrefHeight(buttonHeight);
+
+            // Set the position of the button below the previous button
+            button.setLayoutY(buttonHeight * x);
+
+            // Add the button to the AnchorPane
+            users_pane_view.getChildren().add(button);
+
+            x++;
         }
     }
 
@@ -700,44 +670,42 @@ public class main {
         cars_pane_view.getChildren().clear();
 
         String cars = cb.GetAllCars();
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(cars);
+        JsonElement jsonString = new JsonParser().parse(cars);
+        JsonObject jsonObject = jsonString.getAsJsonObject();
+        String data = jsonObject.get("data").getAsString();
+        String[] stringData = data.split(",");
 
-        // Extract "data" field value
-        JsonNode dataArray = jsonNode.get("data");
         double buttonHeight = 20;
         int x = 0;
         // Iterate through the array and print each string
-        if (dataArray.isArray()) {
-            for (JsonNode node : dataArray) {
-                String dataString = node.asText();
-                Button button = new Button(dataString);
-            
-                button.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        // Handle button click event
-                        JButton clickedButton = (JButton) e.getSource();
-                        String[] text = clickedButton.getText().split("+");
-                        EditCar(text[0]);
-                    }
-                });
+        for (String node : stringData) {
+            String dataString = node;
+            Button button = new Button(dataString);
 
-                // Set the ID of the button
-                button.setId("tab-selected");
-                
-                // Set the width and height of the button
-                button.setPrefWidth(rents_pane_view.getWidth());
-                button.setPrefHeight(buttonHeight);
-                
-                // Set the position of the button below the previous button
-                button.setLayoutY(buttonHeight * x);
-                
-                // Add the button to the AnchorPane
-                cars_pane_view.getChildren().add(button);
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Handle button click event
+                    JButton clickedButton = (JButton) e.getSource();
+                    String[] text = clickedButton.getText().split(" + ");
+                    EditCar(text[0]);
+                }
+            });
 
-                x++;
-            }
+            // Set the ID of the button
+            button.setId("tab-selected");
+
+            // Set the width and height of the button
+            button.setPrefWidth(rents_pane_view.getWidth());
+            button.setPrefHeight(buttonHeight);
+
+            // Set the position of the button below the previous button
+            button.setLayoutY(buttonHeight * x);
+
+            // Add the button to the AnchorPane
+            cars_pane_view.getChildren().add(button);
+
+            x++;
         }
     }
 
@@ -751,37 +719,31 @@ public class main {
 
         String garages = cb.GetAllGarages();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(garages);
-
-        // Extract "data" field value
-        JsonNode dataArray = jsonNode.get("data");
+        JsonElement jsonString = new JsonParser().parse(garages);
+        JsonObject jsonObject = jsonString.getAsJsonObject();
+        String data = jsonObject.get("data").getAsString();
+        String[] stringData = data.split(",");
 
         // Iterate through the array and print each string
-        if (dataArray.isArray()) {
-            for (JsonNode node : dataArray) {
-                String dataString = node.asText();
-                garage_combobox.getItems().add(dataString);
-            }
+        for (String node : stringData) {
+            String dataString = node;
+            garage_combobox.getItems().add(dataString);
         }
 
-        objectMapper = new ObjectMapper();
-        jsonNode = objectMapper.readTree(car);
+        jsonString = new JsonParser().parse(garages);
+        jsonObject = jsonString.getAsJsonObject();
+        data = jsonObject.get("data").getAsString();
+        stringData = data.split(",");
 
-        // Extract "data" field value
-        dataArray = jsonNode.get("data");
+        for (String node : stringData) {
+            String[] array = node.toString().split(" + ");
 
-        if (dataArray.isArray()) {
-            for (JsonNode node : dataArray) {
-                String[] array = dataArray.toString().split("+");
+            carname_textfield.setText(array[1]);
+            licenceplate_textfield.setText(array[2]);
 
-                carname_textfield.setText(array[1]);
-                licenceplate_textfield.setText(array[2]);
+            garage_combobox.setValue(array[3]);
 
-                garage_combobox.setValue(array[3]);
-
-                kilometers_textfield.setText(array[4]);
-            }
+            kilometers_textfield.setText(array[4]);
         }
     }
 

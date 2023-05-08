@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.google.gson.Gson;
 
@@ -28,68 +29,87 @@ public class main {
     Gson gson = new Gson();
 
     @FXML
-    Button side_profile;
+    private Button side_profile;
     @FXML
-    Button side_dashboard;
+    private Button side_dashboard;
     @FXML
-    Button side_settings;
+    private Button side_settings;
     @FXML
-    AnchorPane profile_pane;
+    private AnchorPane profile_pane;
     @FXML
-    AnchorPane dashboard_pane;
+    private AnchorPane dashboard_pane;
     @FXML
-    AnchorPane settings_pane;
+    private AnchorPane settings_pane;
     @FXML
-    TextField text_username;
+    private TextField text_username;
     @FXML
-    TextField text_password;
+    private TextField text_password;
     @FXML
-    TextField username_field_lg;
+    private TextField username_field_lg;
     @FXML
-    TextField password_field_lg;
+    private TextField password_field_lg;
     @FXML
-    TextField real_name_lg;
+    private TextField real_name_lg;
     @FXML
-    Button login_btn;
+    private Button login_btn;
     @FXML
-    ImageView profile_image_lg;
+    private ImageView profile_image_lg;
     @FXML
-    Button cancel_btn_lg;
+    private Button cancel_btn_lg;
     @FXML
-    Button apply_btn_lg;
+    private Button apply_btn_lg;
     @FXML
-    TextField surname_lg;
+    private TextField surname_lg;
     @FXML
-    Button logout_btn;
+    private Button logout_btn;
     @FXML
-    Button side_rent;
+    private Button side_rent;
     @FXML
-    Button side_users;
+    private Button side_users;
     @FXML
-    AnchorPane rents_pane;
+    private AnchorPane rents_pane;
     @FXML
-    AnchorPane createrent_pane;
-    ComboBox car_combobox;
-    ComboBox user_combobox;
-    DatePicker fromdate_datepicker;
-    DatePicker todate_datepicker;
-    AnchorPane rents_pane_view;
+    private AnchorPane createrent_pane;
     @FXML
-    AnchorPane users_pane;
-    AnchorPane users_pane_view;
-    AnchorPane createuser_pane;
-    TextField firstname;
-    TextField surname;
-    DatePicker birth;
-    ComboBox city;
-    TextField username;
-    TextField password;
-    AnchorPane cars_pane_view;
-    AnchorPane create_car_pane;
-    TextField carname_textfield;
-    TextField licenceplate_textfield;
-    ComboBox garage_combobox;
-    TextField kilometers_textfield;
+    private ComboBox car_combobox;
+    @FXML
+    private ComboBox user_combobox;
+    @FXML
+    private DatePicker fromdate_datepicker;
+    @FXML
+    private DatePicker todate_datepicker;
+    @FXML
+    private AnchorPane rents_pane_view;
+    @FXML
+    private AnchorPane users_pane;
+    @FXML
+    private AnchorPane users_pane_view;
+    @FXML
+    private AnchorPane createuser_pane;
+    @FXML
+    private TextField firstname;
+    @FXML
+    private TextField surname;
+    @FXML
+    private DatePicker birth;
+    @FXML
+    private ComboBox city;
+    @FXML
+    private TextField username;
+    @FXML
+    private TextField password;
+    @FXML
+    private AnchorPane cars_pane_view;
+    @FXML
+    private AnchorPane create_car_pane;
+    @FXML
+    private TextField carname_textfield;
+    @FXML
+    private TextField licenceplate_textfield;
+    @FXML
+    private ComboBox garage_combobox;
+    @FXML
+    private TextField kilometers_textfield;
 
     @FXML
     private void initialize() {
@@ -140,10 +160,13 @@ public class main {
 
             String[] infoArray = dataString.split(" + ");
 
-            button.onClick = Function()
-            {
-                EditRent(infoArray[0]);
-            }
+            button.setOnMouseClicked(me -> {
+                try {
+                    EditRent(infoArray[0]);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
 
             // Set the ID of the button
             button.setId("tab-selected");
@@ -162,7 +185,7 @@ public class main {
         }
     }
     String edituserbool = "0";
-    private void CreateUser_Click() throws IOException {
+    public void CreateUser_Click() throws IOException {
         users_pane.setVisible(false);
         createuser_pane.setVisible(true);
 
@@ -235,7 +258,7 @@ public class main {
         editrentbool = "0";
     }
 
-    private void CreateRent_Click() throws IOException {
+    public void CreateRent_Click() throws IOException {
         rents_pane.setVisible(false);
         createrent_pane.setVisible(true);
 
@@ -268,7 +291,7 @@ public class main {
         }
     }
 
-    private void ConfirmCreateRent_Click() throws IOException {
+    public void ConfirmCreateRent_Click() throws IOException {
         if (editrentbool == "0")
         {
             LocalDate selectedDate = fromdate_datepicker.getValue();
@@ -310,7 +333,7 @@ public class main {
         }
     }
 
-    private void ConfirmCreateCar_Click() throws IOException {
+    public void ConfirmCreateCar_Click() throws IOException {
         if (editcarbool == "0")
         {
             String[] garage = garage_combobox.getValue().toString().split(" + ");
@@ -381,8 +404,7 @@ public class main {
         }
     }
 
-    public void EditUser(String username)
-    {
+    public void EditUser(String username) throws IOException {
         edituserbool = username;
 
         String cities = cb.GetAllCitys();
@@ -423,8 +445,7 @@ public class main {
         }
     }
 
-    public void EditRent(String id)
-    {
+    public void EditRent(String id) throws IOException {
         editrentbool = id;
 
         String rent = cb.GetRent(id);
@@ -570,7 +591,7 @@ public class main {
     @FXML
     private void logout_Click() throws IOException{
         logged_out();
-        unloadUsers();
+        //unloadUsers();
     }
 
     @FXML
@@ -605,10 +626,13 @@ public class main {
 
             String[] nodeArray = dataString.split(" + ");
 
-            button.onClick = Function()
-            {
-                EditUser(nodeArray[0]);
-            }
+            button.setOnMouseClicked(me -> {
+                try {
+                    EditUser(nodeArray[0]);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
 
             // Set the ID of the button
             button.setId("tab-selected");
@@ -649,7 +673,7 @@ public class main {
     @FXML
 
     String editcarbool = "0";
-    private void dashboard_Click() throws IOException{
+    public void dashboard_Click() throws IOException{
         side_profile.setId("tab-unselected");
         side_dashboard.setId("tab-selected");
         side_settings.setId("tab-unselected");
@@ -679,10 +703,13 @@ public class main {
 
             String[] nodeArray = dataString.split(" + ");
 
-            button.onClick() = Function()
-            {
-                EditCar(nodeArray[0]);
-            }
+            button.setOnMouseClicked(me -> {
+                try {
+                    EditCar(nodeArray[0]);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
 
             // Set the ID of the button
             button.setId("tab-selected");
@@ -701,8 +728,13 @@ public class main {
         }
     }
 
-    public void EditCar(String id)
-    {
+
+    public void CancelCreateCar_Click() throws IOException {
+        create_car_pane.setVisible(false);
+        cars_pane_view.setVisible(true);
+    }
+
+    public void EditCar(String id) throws IOException {
         editcarbool = id;
 
         String car = cb.GetCar(id);
@@ -753,6 +785,6 @@ public class main {
         rents_pane.setVisible(false);
         users_pane.setVisible(false);
 
-        unloadUsers();
+        //unloadUsers();
     }
 }

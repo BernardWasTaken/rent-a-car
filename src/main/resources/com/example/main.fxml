@@ -1,42 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<VBox prefHeight="439.0" prefWidth="735.0" spacing="10.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.main">
+<VBox prefHeight="439.0" prefWidth="735.0" spacing="10.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.main">
    <children>
       <AnchorPane id="anchorParent" fx:id="anchorParent" prefHeight="424.0" prefWidth="733.0">
          <children>
             <AnchorPane id="main_pane" fx:id="main_pane" layoutX="200.0" prefHeight="439.0" prefWidth="535.0" stylesheets="@design/style.css">
                <children>
-                  <AnchorPane prefHeight="439.0" prefWidth="535.0" fx:id="cars_pane">
+
+                  <AnchorPane fx:id="cars_pane" prefHeight="439.0" prefWidth="535.0" visible="false">
                      <children>
                         <Label text="Cars" />
-                        <Button text="Create" onAction="CreateCar_Click"/>
+                        <Button onAction="#ConfirmCreateCar_Click" text="Create" />
                      </children>
                   </AnchorPane>
+
                   <AnchorPane fx:id="dashboard_pane" prefHeight="439.0" prefWidth="535.0" visible="false">
                      <children>
                         <Label text="Cars" />
-                        <Button text="Create" onAction="CreateCar_Click"/>
+                        <Button onAction="#ConfirmCreateCar_Click" text="Create" />
                         <AnchorPane fx:id="cars_pane_view" prefWidth="535.0" />
                      </children>
                   </AnchorPane>
+
                   <AnchorPane fx:id="profile_pane" prefHeight="439.0" prefWidth="535.0" visible="true">
                      <children>
-                        <GridPane prefHeight="439.0" prefWidth="535.0" stylesheets="@design/grid.css" visible="false">
+                        <GridPane prefHeight="439.0" prefWidth="535.0" stylesheets="@design/grid.css">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="281.0" minWidth="10.0" prefWidth="149.0" />
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="471.0" minWidth="10.0" prefWidth="272.0" />
@@ -66,6 +59,7 @@
                         </GridPane>
                      </children>
                   </AnchorPane>
+
                   <AnchorPane fx:id="createrent_pane" prefHeight="439.0" prefWidth="535.0" visible="false">
                      <children>
                         <Label layoutY="6.0" text="CreateRent" />
@@ -83,6 +77,7 @@
                         <Label text="Settings" />
                      </children>
                   </AnchorPane>
+
                   <AnchorPane fx:id="rents_pane" prefHeight="439.0" prefWidth="535.0" visible="false">
                      <children>
                         <Label text="Rents" />
@@ -90,6 +85,7 @@
                         <AnchorPane fx:id="rents_pane_view" prefWidth="535.0" />
                      </children>
                   </AnchorPane>
+
                   <AnchorPane fx:id="users_pane" prefHeight="439.0" prefWidth="535.0" visible="false">
                      <children>
                         <Label text="Users" />
@@ -97,6 +93,7 @@
                         <AnchorPane fx:id="users_pane_view" prefWidth="535.0" />
                      </children>
                   </AnchorPane>
+
                   <AnchorPane fx:id="createuser_pane" prefHeight="439.0" prefWidth="535.0" visible="false">
                      <children>
                         <Label layoutY="6.0" text="CreateUser" />
@@ -110,19 +107,24 @@
                         <Button layoutX="398.0" layoutY="400.0" mnemonicParsing="false" onAction="#CancelCreateUser_Click" text="Cancel" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="439.0" prefWidth="535.0" fx:id="create_car_pane">
+
+                  <AnchorPane fx:id="create_car_pane" layoutX="10.0" layoutY="10.0" prefHeight="439.0" prefWidth="535.0" visible="fals">
                      <children>
                         <Label text="CreateCar" />
-                        <Button layoutX="462.0" layoutY="400.0" mnemonicParsing="false" text="Confirm" onAction="ConfirmCreateCar_Click"/>
-                        <Button layoutX="397.0" layoutY="400.0" mnemonicParsing="false" text="Cancel" onAction="CancelCreateCar_Click"/>
-                        <TextField layoutX="193.0" layoutY="92.0" fx:id="carname_textfield"/>
-                        <TextField layoutX="193.0" layoutY="138.0" fx:id="licenceplate_textfield"/>
-                        <ComboBox layoutX="193.0" layoutY="186.0" prefWidth="150.0" fx:id="garage_combobox"/>
-                        <TextField layoutX="194.0" layoutY="233.0" fx:id="kilometers_textbox"/>
+                        <Button layoutX="462.0" layoutY="400.0" mnemonicParsing="false" onAction="#ConfirmCreateCar_Click" text="Confirm" />
+                        <Button layoutX="397.0" layoutY="400.0" mnemonicParsing="false" onAction="#CancelCreateCar_Click" text="Cancel" />
+                        <TextField fx:id="carname_textfield" layoutX="193.0" layoutY="92.0" />
+                        <TextField fx:id="licenceplate_textfield" layoutX="193.0" layoutY="138.0" />
+                        <ComboBox fx:id="garage_combobox" layoutX="193.0" layoutY="186.0" prefWidth="150.0" />
+                        <TextField fx:id="kilometers_textbox" layoutX="194.0" layoutY="233.0" />
                      </children>
                   </AnchorPane>
-               </children></AnchorPane>
+
+               </children>
+            </AnchorPane>
+
             <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+
             <AnchorPane id="side_pane" prefHeight="439.0" prefWidth="200.0" stylesheets="@design/side-bar.css">
                <children>
                   <Button id="tab-selected" fx:id="side_profile" layoutY="2.0" mnemonicParsing="false" onAction="#profile_Click" prefHeight="25.0" prefWidth="200.0" stylesheets="@design/tabs.css" text="Profile" />
@@ -133,6 +135,7 @@
                   <Button id="tab-unselected" fx:id="side_users" layoutY="77.0" mnemonicParsing="false" onAction="#users_Click" prefHeight="25.0" prefWidth="200.0" stylesheets="@design/tabs.css" text="Users" visible="false" />
                </children>
             </AnchorPane>
+
          </children>
          <stylesheets>
             <URL value="@design/text-field.css" />

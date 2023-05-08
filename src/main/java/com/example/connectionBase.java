@@ -95,10 +95,11 @@ public class connectionBase {
             return successNumber;
         }
 
-        public void decon(String jsonStr) {
+        /*public void decon(String jsonStr) {
+
             String newStr = jsonStr.replace("data", "");
             System.out.println(newStr);
-        }
+        }*/
 
         public List<String> getUserInfo(String username, String password)
         {

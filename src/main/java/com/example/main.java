@@ -146,19 +146,22 @@ public class main {
 
         JsonElement jsonString = new JsonParser().parse(rents);
         JsonObject jsonObject = jsonString.getAsJsonObject();
-        String data = jsonObject.get("data").getAsString();
-        String[] dataArray = data.split(",");
+        String data = jsonObject.get("data").toString();
+
+        data = data.replace("\"", "");
+
+        String[] stringData = data.split(",");
 
 
         double buttonHeight = 20;
         String test = "";
         int x = 0;
         // Iterate through the array and print each string
-        for (String info : dataArray) {
+        for (String info : stringData) {
             String dataString = info;
             Button button = new Button(dataString);
 
-            String[] infoArray = dataString.split(" + ");
+            String[] infoArray = dataString.split("\\+");
 
             button.setOnMouseClicked(me -> {
                 try {
@@ -194,7 +197,10 @@ public class main {
 
         JsonElement jsonString = new JsonParser().parse(citys);
         JsonObject jsonObject = jsonString.getAsJsonObject();
-        String data = jsonObject.get("data").getAsString();
+        String data = jsonObject.get("data").toString();
+
+        data = data.replace("\"", "");
+
         String[] stringData = data.split(",");
 
         // Iterate through the array and print each string
@@ -270,7 +276,10 @@ public class main {
 
         JsonElement jsonString = new JsonParser().parse(users);
         JsonObject jsonObject = jsonString.getAsJsonObject();
-        String data = jsonObject.get("data").getAsString();
+        String data = jsonObject.get("data").toString();
+
+        data = data.replace("\"", "");
+
         String[] stringData = data.split(",");
 
         // Iterate through the array and print each string
@@ -281,7 +290,10 @@ public class main {
 
         jsonString = new JsonParser().parse(cars);
         jsonObject = jsonString.getAsJsonObject();
-        data = jsonObject.get("data").getAsString();
+        data = jsonObject.get("data").toString();
+
+        data = data.replace("\"", "");
+
         stringData = data.split(",");
 
         // Iterate through the array and print each string
@@ -336,7 +348,7 @@ public class main {
     public void ConfirmCreateCar_Click() throws IOException {
         if (editcarbool == "0")
         {
-            String[] garage = garage_combobox.getValue().toString().split(" + ");
+            String[] garage = garage_combobox.getValue().toString().split("\\+");
 
             int success = cb.CreateCar(carname_textfield.getText(), licenceplate_textfield.getText(), garage[0], kilometers_textfield.getText());
 
@@ -352,7 +364,7 @@ public class main {
         }
         else{
             
-            String[] garage = garage_combobox.getValue().toString().split(" + ");
+            String[] garage = garage_combobox.getValue().toString().split("\\+");
 
             int success = cb.EditCar(editcarbool, carname_textfield.getText(), licenceplate_textfield.getText(), garage[0], kilometers_textfield.getText());
 
@@ -413,7 +425,10 @@ public class main {
 
         JsonElement jsonString = new JsonParser().parse(cities);
         JsonObject jsonObject = jsonString.getAsJsonObject();
-        String data = jsonObject.get("data").getAsString();
+        String data = jsonObject.get("data").toString();
+
+        data = data.replace("\"", "");
+
         String[] stringData = data.split(",");
 
         // Iterate through the array and print each string
@@ -426,11 +441,14 @@ public class main {
 
         jsonString = new JsonParser().parse(user);
         jsonObject = jsonString.getAsJsonObject();
-        data = jsonObject.get("data").getAsString();
+        data = jsonObject.get("data").toString();
+
+        data = data.replace("\"", "");
+
         stringData = data.split(",");
 
         for (String node : stringData) {
-            String[] array = node.toString().split(" + ");
+            String[] array = node.toString().split("\\+");
 
             firstname.setText(array[1]);
             surname.setText(array[2]);
@@ -458,7 +476,10 @@ public class main {
 
         JsonElement jsonString = new JsonParser().parse(users);
         JsonObject jsonObject = jsonString.getAsJsonObject();
-        String data = jsonObject.get("data").getAsString();
+        String data = jsonObject.get("data").toString();
+
+        data = data.replace("\"", "");
+
         String[] stringData = data.split(",");
 
         // Iterate through the array and print each string
@@ -469,7 +490,10 @@ public class main {
 
         jsonString = new JsonParser().parse(cars);
         jsonObject = jsonString.getAsJsonObject();
-        data = jsonObject.get("data").getAsString();
+        data = jsonObject.get("data").toString();
+
+        data = data.replace("\"", "");
+
         stringData = data.split(",");
 
         // Iterate through the array and print each string
@@ -480,11 +504,14 @@ public class main {
 
         jsonString = new JsonParser().parse(rent);
         jsonObject = jsonString.getAsJsonObject();
-        data = jsonObject.get("data").getAsString();
+        data = jsonObject.get("data").toString();
+
+        data = data.replace("\"", "");
+
         stringData = data.split(",");
 
         for (String node : stringData) {
-            String[] array = node.toString().split(" + ");
+            String[] array = node.toString().split("\\+");
 
             DateTimeFormatter formatedate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate fromdate = LocalDate.parse(array[3], formatedate);
@@ -614,7 +641,10 @@ public class main {
         String rents = cb.GetAllUsers();
         JsonElement jsonString = new JsonParser().parse(rents);
         JsonObject jsonObject = jsonString.getAsJsonObject();
-        String data = jsonObject.get("data").getAsString();
+        String data = jsonObject.get("data").toString();
+
+        data = data.replace("\"", "");
+
         String[] stringData = data.split(",");
 
         double buttonHeight = 20;
@@ -624,7 +654,7 @@ public class main {
             String dataString = node;
             Button button = new Button(dataString);
 
-            String[] nodeArray = dataString.split(" + ");
+            String[] nodeArray = dataString.split("\\+");
 
             button.setOnMouseClicked(me -> {
                 try {
@@ -691,7 +721,11 @@ public class main {
         String cars = cb.GetAllCars();
         JsonElement jsonString = new JsonParser().parse(cars);
         JsonObject jsonObject = jsonString.getAsJsonObject();
-        String data = jsonObject.get("data").getAsString();
+
+        String data = jsonObject.get("data").toString();
+
+        data = data.replace("\"", "");
+
         String[] stringData = data.split(",");
 
         double buttonHeight = 20;
@@ -701,11 +735,12 @@ public class main {
             String dataString = node;
             Button button = new Button(dataString);
 
-            String[] nodeArray = dataString.split(" + ");
+            String[] nodeArray = dataString.split("\\+");
 
             button.setOnMouseClicked(me -> {
                 try {
                     EditCar(nodeArray[0]);
+                    System.out.println(nodeArray[0].toString());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -739,13 +774,22 @@ public class main {
 
         String car = cb.GetCar(id);
 
+        System.out.println("1");
+
         garage_combobox.getItems().clear();
+
+        System.out.println("1");
 
         String garages = cb.GetAllGarages();
 
+        System.out.println("1");
+
         JsonElement jsonString = new JsonParser().parse(garages);
         JsonObject jsonObject = jsonString.getAsJsonObject();
-        String data = jsonObject.get("data").getAsString();
+        String data = jsonObject.get("data").toString();
+
+        data = data.replace("\"", "");
+
         String[] stringData = data.split(",");
 
         // Iterate through the array and print each string
@@ -756,11 +800,14 @@ public class main {
 
         jsonString = new JsonParser().parse(garages);
         jsonObject = jsonString.getAsJsonObject();
-        data = jsonObject.get("data").getAsString();
+        data = jsonObject.get("data").toString();
+
+        data = data.replace("\"", "");
+
         stringData = data.split(",");
 
         for (String node : stringData) {
-            String[] array = node.toString().split(" + ");
+            String[] array = node.toString().split("\\+");
 
             carname_textfield.setText(array[1]);
             licenceplate_textfield.setText(array[2]);

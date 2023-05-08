@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
@@ -19,15 +20,15 @@
                      </children>
                   </AnchorPane>
 
-                  <AnchorPane fx:id="dashboard_pane" prefHeight="439.0" prefWidth="535.0" visible="false">
+                  <AnchorPane fx:id="dashboard_pane" prefHeight="439.0" prefWidth="535.0">
                      <children>
                         <Label text="Cars" />
                         <Button onAction="#ConfirmCreateCar_Click" text="Create" />
-                        <AnchorPane fx:id="cars_pane_view" prefWidth="535.0" />
+                        <AnchorPane fx:id="cars_pane_view" layoutY="34.0" prefHeight="415.0" prefWidth="535.0" />
                      </children>
                   </AnchorPane>
 
-                  <AnchorPane fx:id="profile_pane" prefHeight="439.0" prefWidth="535.0" visible="true">
+                  <AnchorPane fx:id="profile_pane" prefHeight="439.0" prefWidth="535.0" visible="false">
                      <children>
                         <GridPane prefHeight="439.0" prefWidth="535.0" stylesheets="@design/grid.css">
                           <columnConstraints>
@@ -82,7 +83,10 @@
                      <children>
                         <Label text="Rents" />
                         <Button onAction="#CreateRent_Click" text="Create" />
-                        <AnchorPane fx:id="rents_pane_view" prefWidth="535.0" />
+                        <AnchorPane fx:id="rents_pane_view" layoutY="34.0" prefHeight="415.0" prefWidth="535.0">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets></AnchorPane>
                      </children>
                   </AnchorPane>
 
@@ -90,7 +94,7 @@
                      <children>
                         <Label text="Users" />
                         <Button onAction="#CreateUser_Click" text="Create" />
-                        <AnchorPane fx:id="users_pane_view" prefWidth="535.0" />
+                        <AnchorPane fx:id="users_pane_view" layoutY="34.0" prefHeight="415.0" prefWidth="535.0" />
                      </children>
                   </AnchorPane>
 

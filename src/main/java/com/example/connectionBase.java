@@ -270,10 +270,12 @@ public class connectionBase {
             String responseData = null;
             try{
 
-                URL url = new URL("http://localhost:8080/users/insertUser?new_firstname=" + firstname + "&new_surname=" + surname + "&new_birth" + birth + "&new_email=" + email + "&new_username=" + username + "&new_password=" + password + ""); 
+                URL url = new URL("http://localhost:8080/users/insertUser?new_firstname=" + firstname + "&new_surname=" + surname + "&new_birth=" + birth + "&new_city_id=1&new_email=" + email + "&new_username=" + username + "&new_password=" + password + "");
                 // Replace with your API endpoint URL
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
+
+                System.out.println(url.toString());
 
                 int responseCode = connection.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -312,6 +314,8 @@ public class connectionBase {
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
 
+                System.out.println(url.toString());
+
                 int responseCode = connection.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     Scanner scanner = new Scanner(connection.getInputStream());
@@ -343,7 +347,6 @@ public class connectionBase {
             int successNumber = -1;
             String responseData = null;
             try{
-
                 URL url = new URL("http://localhost:8080/cars/insertCar?new_name=" + name + "&new_licenceplate=" + licenceplate + "&new_garage_id=" + garage_id + "&new_kilometers=" + kilometers + ""); 
                 // Replace with your API endpoint URL
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -455,7 +458,7 @@ public class connectionBase {
             String responseData = null;
             try{
 
-                URL url = new URL("http://localhost:8080/rents/updateUsers?old_username=" + oldusername + "&new_username=" + username + "&new_firstname=" + firstname + "&new_surname=" + surname + "&new_password=" + password + ""); 
+                URL url = new URL("http://localhost:8080/users/updateUser?old_username=" + oldusername + "&new_username=" + username + "&new_firstname=" + firstname + "&new_surname=" + surname + "&new_password=" + password + "");
                 // Replace with your API endpoint URL
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
@@ -491,7 +494,7 @@ public class connectionBase {
             String responseData = null;
 
             try {
-                String url = "http://localhost:8080/users/getSpec?id=" + username; // Replace with your API endpoint URL
+                String url = "http://localhost:8080/users/getSpec?username=" + username; // Replace with your API endpoint URL
     
                 URL apiUrl = new URL(url);
                 HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();

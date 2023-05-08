@@ -42,6 +42,9 @@ public class main {
     private AnchorPane settings_pane;
     @FXML
     private TextField text_username;
+
+    @FXML
+    private TextField emaik_textfield;
     @FXML
     private TextField text_password;
     @FXML
@@ -149,6 +152,8 @@ public class main {
         String data = jsonObject.get("data").toString();
 
         data = data.replace("\"", "");
+        data = data.replace("[", "");
+        data = data.replace("]", "");
 
         String[] stringData = data.split(",");
 
@@ -200,6 +205,8 @@ public class main {
         String data = jsonObject.get("data").toString();
 
         data = data.replace("\"", "");
+data = data.replace("[", "");
+data = data.replace("]", "");
 
         String[] stringData = data.split(",");
 
@@ -220,10 +227,7 @@ public class main {
     public void ConfirmCreateUser_Click() throws IOException {
         if (edituserbool == "0")
         {
-            LocalDate selectedDate = birth.getValue();
-            String birth = selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
-            int success = cb.CreateUser(firstname.getText(), surname.getText(), birth, city.getValue().toString(), "zamenjaj", username.getText(), password.getText());
+            int success = cb.CreateUser(firstname.getText(), surname.getText(), "2022-01-01", city.getValue().toString(), emaik_textfield.getText().toString(), username.getText(), password.getText());
 
             if (success == -1)
             {
@@ -236,12 +240,6 @@ public class main {
             }
         }
         else{
-            LocalDate selectedDate = fromdate_datepicker.getValue();
-            String fromdate = selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
-            selectedDate = todate_datepicker.getValue();
-            String todate = selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
             int success = cb.EditUser(edituserbool, firstname.getText(), surname.getText(), username.getText(), password.getText());
 
             if (success == -1)
@@ -279,6 +277,8 @@ public class main {
         String data = jsonObject.get("data").toString();
 
         data = data.replace("\"", "");
+        data = data.replace("[", "");
+        data = data.replace("]", "");
 
         String[] stringData = data.split(",");
 
@@ -293,6 +293,8 @@ public class main {
         data = jsonObject.get("data").toString();
 
         data = data.replace("\"", "");
+        data = data.replace("[", "");
+        data = data.replace("]", "");
 
         stringData = data.split(",");
 
@@ -312,7 +314,10 @@ public class main {
             selectedDate = todate_datepicker.getValue();
             String todate = selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-            int success = cb.CreateRent(car_combobox.getValue().toString(), user_combobox.getValue().toString(), fromdate, todate);
+            String[] carinfo = car_combobox.getValue().toString().split("\\+");
+            String[] userinfo = user_combobox.getValue().toString().split(("\\+"));
+
+            int success = cb.CreateRent(carinfo[0], userinfo[0], fromdate, todate);
 
             if (success == -1)
             {
@@ -417,7 +422,12 @@ public class main {
     }
 
     public void EditUser(String username) throws IOException {
+        createuser_pane.setVisible(true);
+        users_pane.setVisible(false);
+
         edituserbool = username;
+
+        System.out.println(username);
 
         String cities = cb.GetAllCitys();
 
@@ -428,6 +438,8 @@ public class main {
         String data = jsonObject.get("data").toString();
 
         data = data.replace("\"", "");
+        data = data.replace("[", "");
+        data = data.replace("]", "");
 
         String[] stringData = data.split(",");
 
@@ -439,46 +451,63 @@ public class main {
 
         String user = cb.GetUser(username);
 
+        System.out.println(user);
+
         jsonString = new JsonParser().parse(user);
         jsonObject = jsonString.getAsJsonObject();
         data = jsonObject.get("data").toString();
 
         data = data.replace("\"", "");
+        data = data.replace("[", "");
+        data = data.replace("]", "");
 
         stringData = data.split(",");
+
+        System.out.println(stringData[0]);
 
         for (String node : stringData) {
             String[] array = node.toString().split("\\+");
 
-            firstname.setText(array[1]);
-            surname.setText(array[2]);
+            firstname.setText(array[0]);
+            surname.setText(array[1]);
 
-            DateTimeFormatter formatedate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate birthday = LocalDate.parse(array[3], formatedate);
+            emaik_textfield.setText(array[2]);
 
-            birth.setValue(birthday);
-
-            this.username.setText(array[4]);
-            password.setText(array[5]);
+            this.username.setText(array[3]);
+            password.setText(array[4]);
         }
     }
 
     public void EditRent(String id) throws IOException {
+        rents_pane.setVisible(false);
+        createrent_pane.setVisible(true);
+
+        System.out.print(id);
         editrentbool = id;
+        System.out.println("2");
 
         String rent = cb.GetRent(id);
+        System.out.println("2");
+
 
         String cars = cb.GetAllCars();
         String users = cb.getAllUsers();
 
         user_combobox.getItems().clear();
         car_combobox.getItems().clear();
+        System.out.println("2");
 
         JsonElement jsonString = new JsonParser().parse(users);
         JsonObject jsonObject = jsonString.getAsJsonObject();
         String data = jsonObject.get("data").toString();
 
+        System.out.println(data);
+
         data = data.replace("\"", "");
+        data = data.replace("[", "");
+        data = data.replace("]", "");
+
+        System.out.println(data);
 
         String[] stringData = data.split(",");
 
@@ -488,13 +517,24 @@ public class main {
             user_combobox.getItems().add(dataString);
         }
 
+
+
         jsonString = new JsonParser().parse(cars);
         jsonObject = jsonString.getAsJsonObject();
         data = jsonObject.get("data").toString();
 
+        System.out.println(data);
+
         data = data.replace("\"", "");
+        data = data.replace("[", "");
+        data = data.replace("]", "");
+
+        System.out.println(data);
 
         stringData = data.split(",");
+
+
+        System.out.println(data);
 
         // Iterate through the array and print each string
         for (String node : stringData) {
@@ -506,9 +546,18 @@ public class main {
         jsonObject = jsonString.getAsJsonObject();
         data = jsonObject.get("data").toString();
 
+
+        System.out.println(data);
+
         data = data.replace("\"", "");
+        data = data.replace("[", "");
+        data = data.replace("]", "");
+
+        System.out.println(data);
 
         stringData = data.split(",");
+
+        System.out.println(stringData[0].toString());
 
         for (String node : stringData) {
             String[] array = node.toString().split("\\+");
@@ -644,6 +693,8 @@ public class main {
         String data = jsonObject.get("data").toString();
 
         data = data.replace("\"", "");
+        data = data.replace("[", "");
+        data = data.replace("]", "");
 
         String[] stringData = data.split(",");
 
@@ -658,7 +709,7 @@ public class main {
 
             button.setOnMouseClicked(me -> {
                 try {
-                    EditUser(nodeArray[0]);
+                    EditUser(nodeArray[4]);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -725,6 +776,8 @@ public class main {
         String data = jsonObject.get("data").toString();
 
         data = data.replace("\"", "");
+        data = data.replace("[", "");
+        data = data.replace("]", "");
 
         String[] stringData = data.split(",");
 
@@ -770,27 +823,27 @@ public class main {
     }
 
     public void EditCar(String id) throws IOException {
+        create_car_pane.setVisible(true);
+        dashboard_pane.setVisible(false);
+
         editcarbool = id;
 
         String car = cb.GetCar(id);
 
-        System.out.println("1");
-
         garage_combobox.getItems().clear();
 
-        System.out.println("1");
-
         String garages = cb.GetAllGarages();
-
-        System.out.println("1");
 
         JsonElement jsonString = new JsonParser().parse(garages);
         JsonObject jsonObject = jsonString.getAsJsonObject();
         String data = jsonObject.get("data").toString();
 
         data = data.replace("\"", "");
+        data = data.replace("[", "");
+        data = data.replace("]", "");
 
         String[] stringData = data.split(",");
+
 
         // Iterate through the array and print each string
         for (String node : stringData) {
@@ -798,23 +851,33 @@ public class main {
             garage_combobox.getItems().add(dataString);
         }
 
-        jsonString = new JsonParser().parse(garages);
+        System.out.println(garages);
+
+        jsonString = new JsonParser().parse(car);
         jsonObject = jsonString.getAsJsonObject();
         data = jsonObject.get("data").toString();
 
+        System.out.println(data);
+
         data = data.replace("\"", "");
+        data = data.replace("[", "");
+        data = data.replace("]", "");
+
+        System.out.println(data);
 
         stringData = data.split(",");
 
         for (String node : stringData) {
             String[] array = node.toString().split("\\+");
 
-            carname_textfield.setText(array[1]);
-            licenceplate_textfield.setText(array[2]);
+            carname_textfield.setText(array[0]);
+            licenceplate_textfield.setText(array[1]);
 
-            garage_combobox.setValue(array[3]);
+            garage_combobox.setValue(array[2]);
 
-            kilometers_textfield.setText(array[4]);
+            System.out.println(array[3].toString());
+
+            kilometers_textfield.setText(array[3].toString());
         }
     }
 

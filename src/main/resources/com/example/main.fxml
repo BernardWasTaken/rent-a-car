@@ -103,7 +103,7 @@
                         <Label layoutY="6.0" text="CreateUser" />
                         <TextField fx:id="firstname" layoutX="193.0" layoutY="87.0" />
                         <TextField fx:id="surname" layoutX="193.0" layoutY="122.0" />
-                        <DatePicker fx:id="birth" layoutX="181.0" layoutY="161.0" />
+                        <TextField fx:id="emaik_textfield" layoutX="181.0" layoutY="161.0" />
                         <ComboBox fx:id="city" layoutX="193.0" layoutY="195.0" prefWidth="150.0" />
                         <TextField fx:id="username" layoutX="194.0" layoutY="231.0" />
                         <TextField fx:id="password" layoutX="194.0" layoutY="271.0" />
@@ -120,7 +120,7 @@
                         <TextField fx:id="carname_textfield" layoutX="193.0" layoutY="92.0" />
                         <TextField fx:id="licenceplate_textfield" layoutX="193.0" layoutY="138.0" />
                         <ComboBox fx:id="garage_combobox" layoutX="193.0" layoutY="186.0" prefWidth="150.0" />
-                        <TextField fx:id="kilometers_textbox" layoutX="194.0" layoutY="233.0" />
+                        <TextField fx:id="kilometers_textfield" layoutX="194.0" layoutY="233.0" />
                      </children>
                   </AnchorPane>
 
